@@ -1,0 +1,2697 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Méthode Philippe Colucci — U15</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap');
+
+  :root {
+    --vert:      #1DB954;
+    --vert-dark: #158f3e;
+    --gazon:     #0a3d1f;
+    --gazon-mid: #0f5c2e;
+    --ligne:     #ffffff22;
+    --blanc:     #f2f5f0;
+    --gris:      #8a9e8e;
+    --card-bg:   #0d2e17;
+    --card2:     #112a1b;
+    --orange:    #f0861a;
+    --bleu:      #2b9ddb;
+    --rouge:     #e03a3a;
+    --violet:    #8b5cf6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--gazon);
+    color: var(--blanc);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--gazon-mid);
+    border-bottom: 3px solid var(--vert);
+    padding: 18px 24px 14px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .logo-ball {
+    width: 44px; height: 44px;
+    background: var(--vert);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  header h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 26px; letter-spacing: 1px;
+    line-height: 1;
+  }
+  header h1 span { color: var(--vert); }
+  header p { font-size: 12px; color: var(--gris); margin-top: 3px; }
+
+  /* ── TABS ── */
+  nav.tabs {
+    display: flex; gap: 2px;
+    background: #071a0e;
+    padding: 0 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav.tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    background: none; border: none; color: var(--gris);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 600; letter-spacing: .5px;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    cursor: pointer; white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  .tab-btn:hover { color: var(--blanc); }
+  .tab-btn.active { color: var(--vert); border-bottom-color: var(--vert); }
+
+  /* ── PAGES ── */
+  .page { display: none; padding: 20px 16px 40px; max-width: 900px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 22px; letter-spacing: 1px;
+    color: var(--vert); text-transform: uppercase;
+    margin: 28px 0 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::after {
+    content: ''; flex: 1; height: 2px;
+    background: var(--ligne);
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid #1a4a28;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 17px; letter-spacing: .5px;
+    margin-bottom: 8px; color: var(--blanc);
+  }
+
+  /* ── PHASE BADGE ── */
+  .badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; letter-spacing: .5px;
+    text-transform: uppercase; padding: 2px 8px;
+    border-radius: 20px; margin-right: 6px;
+  }
+  .badge-prep   { background: #2b6cb0; color: #fff; }
+  .badge-comp   { background: #276749; color: #fff; }
+  .badge-treve  { background: #744210; color: #fff; }
+  .badge-fin    { background: #553c9a; color: #fff; }
+
+  /* ── PROGRAMME ANNUEL GRID ── */
+  .months-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px;
+  }
+  .month-card {
+    background: var(--card2);
+    border: 1px solid #1a4a28;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  .month-card .mname {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 15px;
+    color: var(--vert); margin-bottom: 4px;
+  }
+  .month-card .mtheme { color: var(--blanc); font-weight: 500; font-size: 13px; }
+  .month-card .mphase { color: var(--gris); font-size: 11px; margin-top: 3px; }
+
+  /* ── SÉANCE BUILDER ── */
+  .seance-header {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--card2);
+    border: 1px solid #1a4a28;
+    border-radius: 10px; padding: 14px 18px;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .seance-header:hover { background: #1a3d25; }
+  .seance-header .snum {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px; font-weight: 900; color: var(--vert);
+    line-height: 1; width: 36px; flex-shrink: 0; text-align: center;
+  }
+  .seance-header .sinfo { flex: 1; }
+  .seance-header .sinfo h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px; font-weight: 700;
+  }
+  .seance-header .sinfo p { font-size: 12px; color: var(--gris); }
+  .seance-header .sarrow { font-size: 18px; color: var(--gris); transition: transform .3s; }
+  .seance-wrap.open .sarrow { transform: rotate(90deg); }
+
+  .seance-body {
+    display: none;
+    background: var(--card-bg);
+    border: 1px solid #1a4a28;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 0 18px 18px;
+    margin-bottom: 12px;
+  }
+  .seance-wrap.open .seance-body { display: block; }
+
+  /* bloc d'exercice */
+  .exo-block {
+    margin-top: 18px;
+    border-left: 3px solid var(--vert);
+    padding-left: 14px;
+  }
+  .exo-block.tech  { border-color: var(--bleu); }
+  .exo-block.phys  { border-color: var(--orange); }
+  .exo-block.tact  { border-color: var(--violet); }
+  .exo-block.jeu   { border-color: var(--vert); }
+
+  .exo-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 4px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .exo-label.tech  { color: var(--bleu); }
+  .exo-label.phys  { color: var(--orange); }
+  .exo-label.tact  { color: var(--violet); }
+  .exo-label.jeu   { color: var(--vert); }
+
+  .exo-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 17px; color: var(--blanc);
+    margin-bottom: 6px;
+  }
+  .exo-duration {
+    font-size: 11px; color: var(--gris); margin-bottom: 8px;
+  }
+  .exo-steps { list-style: none; }
+  .exo-steps li {
+    font-size: 14px; padding: 3px 0;
+    display: flex; gap: 8px;
+  }
+  .exo-steps li::before {
+    content: '→'; color: var(--vert); flex-shrink: 0;
+  }
+
+  /* ── TERRAIN SVG ── */
+  .terrain-wrap {
+    margin-top: 14px;
+    background: #0a3d1f;
+    border-radius: 8px;
+    border: 1px solid #1a4a28;
+    padding: 12px;
+    overflow-x: auto;
+  }
+  .terrain-wrap svg {
+    display: block; margin: 0 auto;
+    max-width: 100%;
+  }
+  .terrain-caption {
+    font-size: 12px; color: var(--gris);
+    text-align: center; margin-top: 8px;
+  }
+
+  /* ── MATÉRIEL CHIPS ── */
+  .mat-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .chip {
+    background: #0a3d1f;
+    border: 1px solid #1a4a28;
+    border-radius: 20px;
+    font-size: 12px; padding: 3px 10px;
+    color: var(--vert);
+  }
+
+  /* ── STATS BARS ── */
+  .stat-row { margin-bottom: 10px; }
+  .stat-label { font-size: 13px; margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .stat-bar { height: 7px; background: #1a4a28; border-radius: 4px; overflow: hidden; }
+  .stat-fill { height: 100%; border-radius: 4px; transition: width .5s; }
+
+  /* ── TIPS ── */
+  .tip {
+    background: #0d2e17;
+    border-left: 4px solid var(--orange);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-top: 12px;
+    color: #f0c080;
+  }
+  .tip strong { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--orange); margin-bottom: 4px; }
+
+  /* ── FIL CONDUCTEUR DE SÉANCE ── */
+  .fil-seance {
+    margin-top: 14px;
+    background: #0a2e0a;
+    border: 1px solid var(--vert);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .fil-seance .fico { flex-shrink: 0; font-size: 18px; }
+  .fil-seance strong { color: var(--vert); display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+
+  /* ── BOUTON VERS SCHÉMA ── */
+  .schema-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 10px;
+    background: #0a3d1f;
+    border: 1px solid var(--vert);
+    color: var(--vert);
+    border-radius: 6px;
+    padding: 6px 13px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: .5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+  }
+  .schema-link:hover { background: var(--vert); color: #06250f; }
+  .gk-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 10px; margin-left: 8px;
+    background: #2a1a00;
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    border-radius: 6px;
+    padding: 6px 13px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: .5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+  }
+  .gk-link:hover { background: var(--orange); color: #2a1a00; }
+  .btn-back-seance {
+    position: fixed; bottom: 20px; right: 16px; z-index: 50;
+    display: none; align-items: center; gap: 8px;
+    background: var(--vert); color: #06250f;
+    border: none; border-radius: 30px;
+    padding: 12px 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px; font-weight: 700; letter-spacing: .5px;
+    text-transform: uppercase; cursor: pointer;
+    box-shadow: 0 4px 18px #00000088;
+  }
+  .btn-back-seance:hover { background: #3ed87a; }
+  @media print { .btn-back-seance { display: none !important; } }
+
+  .schema-highlight {
+    box-shadow: 0 0 0 3px var(--vert), 0 0 18px #1db95466;
+    transition: box-shadow .3s;
+  }
+
+  /* ── VARIANTES ── */
+  .variantes { margin-top: 14px; border-top: 1px solid #1a4a28; padding-top: 10px; }
+  .variantes-title { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--gris); margin-bottom: 6px; font-weight: 700; }
+  .var-row { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; padding: 4px 0; }
+  .var-tag { flex-shrink: 0; font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; width: 66px; text-align: center; }
+  .var-easy .var-tag { background: #1b5e3a; color: #8ff0b8; }
+  .var-med  .var-tag { background: #6e5410; color: #f5d98a; }
+  .var-hard .var-tag { background: #7a2424; color: #f2a8a8; }
+
+  /* ── FICHE IMPRIMABLE ── */
+  .fiche-actions { max-width: 800px; margin: 0 auto 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-print { background: var(--vert); color: #06250f; border: none; border-radius: 8px; padding: 10px 18px; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; cursor: pointer; }
+  .btn-print:hover { background: #3ed87a; }
+  .btn-reset { background: transparent; color: var(--gris); border: 1px solid #1a4a28; border-radius: 8px; padding: 10px 16px; font-size: 13px; cursor: pointer; }
+  .btn-reset:hover { color: var(--blanc); border-color: var(--gris); }
+  .fiche {
+    max-width: 800px; margin: 0 auto; background: #fff; color: #14241a;
+    border-radius: 6px; padding: 26px 30px; font-size: 13px; line-height: 1.4;
+    box-shadow: 0 10px 40px #00000044;
+  }
+  .fiche h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 24px; letter-spacing: .5px; color: #0f5c2e; border-bottom: 3px solid #0f5c2e; padding-bottom: 6px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: baseline; }
+  .fiche h2 small { font-size: 13px; color: #666; font-weight: 600; letter-spacing: 0; }
+  .fiche-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; margin-bottom: 14px; }
+  .fiche-field { display: flex; align-items: baseline; gap: 8px; border-bottom: 1px solid #cdd8d0; padding-bottom: 3px; }
+  .fiche-field label { font-weight: 700; color: #0f5c2e; font-size: 12px; white-space: nowrap; }
+  .fiche-field .fill { flex: 1; min-height: 16px; outline: none; }
+  .fiche table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+  .fiche th { background: #0f5c2e; color: #fff; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; padding: 6px 8px; text-align: left; }
+  .fiche td { border: 1px solid #cdd8d0; padding: 6px 8px; vertical-align: top; }
+  .fiche td .fill { outline: none; min-height: 30px; }
+  .fiche td.tcol { background: #eef4ef; font-weight: 700; color: #0f5c2e; width: 46px; text-align: center; white-space: nowrap; }
+  .fiche td.pcol { background: #f5f9f6; font-weight: 600; width: 96px; }
+  .fiche-box { border: 1px solid #cdd8d0; border-radius: 4px; padding: 8px 10px; margin-bottom: 12px; }
+  .fiche-box .lbl { font-weight: 700; color: #0f5c2e; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; display: block; margin-bottom: 4px; }
+  .fiche-box .fill { outline: none; min-height: 50px; }
+  .fiche .editable:empty:before { content: attr(data-ph); color: #9bb0a2; font-style: italic; }
+
+  /* ── ONGLET GARDIEN ── */
+  .gk-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .gk-table th { background: #0a3d1f; color: var(--vert); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; padding: 7px 9px; text-align: left; }
+  .gk-table td { border: 1px solid #1a4a28; padding: 7px 9px; vertical-align: top; }
+  .gk-table td:first-child { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; white-space: nowrap; color: var(--blanc); }
+  .gk-table tr:nth-child(even) td { background: #0a2a14; }
+  .gk-avec { color: #8ff0b8; }
+  .gk-spe { color: var(--jaune, #f0c030); color: #f0c030; }
+  .gk-or td { background: #1a2a0a !important; }
+
+  /* ── COMPOSEUR DE SÉANCE ── */
+  .composer { max-width: 800px; margin: 0 auto 16px; background: var(--card-bg); border: 1px solid #1a4a28; border-radius: 10px; padding: 16px 20px; }
+  .composer-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 17px; color: var(--vert); margin-bottom: 12px; }
+  .composer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .composer-field { display: flex; flex-direction: column; gap: 4px; }
+  .composer-field label { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--gris); font-weight: 700; }
+  .composer-field select { background: #0a3d1f; color: var(--blanc); border: 1px solid #1a4a28; border-radius: 6px; padding: 8px 10px; font-family: 'Barlow', sans-serif; font-size: 14px; cursor: pointer; }
+  .composer-field select:focus { outline: none; border-color: var(--vert); }
+  .composer-theme { margin-bottom: 14px; }
+  .composer-hint { font-size: 12px; color: var(--gris); margin-top: 12px; }
+
+  @media print {
+    @page { size: A4 portrait; margin: 12mm; }
+    body { background: #fff !important; }
+    body * { visibility: hidden; }
+    #page-fiche, #page-fiche * { visibility: visible; }
+    #page-fiche { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 0; }
+    .fiche-actions, .composer { display: none !important; }
+    .fiche { box-shadow: none; max-width: 100%; padding: 0; }
+    .fiche .editable:empty:before { content: ''; }
+  }
+
+  /* ── PLANNING HEBDO ── */
+  .semaine-type {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .jour-card {
+    background: var(--card2);
+    border: 1px solid #1a4a28;
+    border-radius: 8px; padding: 14px;
+  }
+  .jour-card h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px; font-weight: 700;
+    color: var(--vert); margin-bottom: 8px;
+  }
+  .timeline { list-style: none; }
+  .timeline li {
+    display: flex; gap: 10px;
+    font-size: 13px; padding: 4px 0;
+    border-bottom: 1px solid #1a4a2833;
+  }
+  .timeline li:last-child { border: none; }
+  .t-time { color: var(--gris); width: 40px; flex-shrink: 0; font-size: 12px; }
+  .t-type { font-weight: 500; }
+
+  /* ── OBJECTIFS ── */
+  .obj-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .obj-card {
+    background: var(--card2);
+    border: 1px solid #1a4a28;
+    border-radius: 8px; padding: 14px;
+  }
+  .obj-card h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px; font-weight: 700; margin-bottom: 8px;
+  }
+  .obj-card ul { list-style: none; }
+  .obj-card ul li { font-size: 13px; padding: 2px 0; display: flex; gap: 6px; }
+  .obj-card ul li::before { content: '✓'; color: var(--vert); }
+
+  /* ── PROGRESSIONS ── */
+  .prog-phase {
+    display: flex; gap: 8px; align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .prog-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--vert); flex-shrink: 0; margin-top: 4px;
+  }
+  .prog-line { font-size: 14px; }
+  .prog-line strong { color: var(--vert); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .semaine-type { grid-template-columns: 1fr; }
+    header h1 { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-ball">⚽</div>
+  <div>
+    <h1>MÉTHODE <span>PHILIPPE COLUCCI</span> <span style="font-size:15px; letter-spacing:2px; color:#f0c030; border:1px solid #f0c030; border-radius:20px; padding:2px 10px; vertical-align:middle;">U15</span></h1>
+    <p>Club amateur · 15–18 joueurs · 2 séances/semaine · 1h15</p>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" onclick="showTab('programme')">📅 Programme annuel</button>
+  <button class="tab-btn" onclick="showTab('seances')">🏃 Séances type</button>
+  <button class="tab-btn" onclick="showTab('exercices')">⚽ Exercices & schémas</button>
+  <button class="tab-btn" onclick="showTab('objectifs')">🎯 Objectifs</button>
+  <button class="tab-btn" onclick="showTab('conseils')">💡 Conseils éduc</button>
+  <button class="tab-btn" onclick="showTab('gardien')">🧤 Gardien</button>
+  <button class="tab-btn" onclick="showTab('fiche')">🖨️ Fiche séance</button>
+</nav>
+<button class="btn-back-seance" id="btn-back-seance" onclick="backToSeance()">← Retour à la séance</button>
+
+<!-- ══════════════════════════════════════════════════════ PAGE 1 : PROGRAMME ANNUEL -->
+<div class="page active" id="page-programme">
+
+  <div class="section-title">Structure de la saison</div>
+
+  <div class="card">
+    <div class="card-title">Contexte & philosophie</div>
+    <p style="font-size:14px; color:#c0d0c4; margin-bottom:10px;">
+      Groupe mixte débutants/intermédiaires, 15–18 joueurs U15, club amateur. Priorité : <strong>le plaisir, la progression individuelle et la cohésion</strong>. Passage du foot à 8 → foot à 11, donc on intègre progressivement les notions d'espace, de largeur et de profondeur.
+    </p>
+    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
+      <span class="chip">⚽ Technique individuelle</span>
+      <span class="chip">🧠 Lecture du jeu simple</span>
+      <span class="chip">💪 Physique adapté U15</span>
+      <span class="chip">🤝 Esprit d'équipe</span>
+      <span class="chip">😄 Plaisir avant tout</span>
+    </div>
+  </div>
+
+  <div class="section-title">Répartition type d'une séance (1h15)</div>
+  <div class="card">
+    <div class="stat-row">
+      <div class="stat-label"><span>🟡 Échauffement & activation</span><span>15 min</span></div>
+      <div class="stat-bar"><div class="stat-fill" style="width:20%; background:#f0c030;"></div></div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-label"><span>🔵 Technique / Exercice ciblé</span><span>20 min</span></div>
+      <div class="stat-bar"><div class="stat-fill" style="width:27%; background:var(--bleu);"></div></div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-label"><span>🟣 Situation de jeu réduit</span><span>20 min</span></div>
+      <div class="stat-bar"><div class="stat-fill" style="width:27%; background:var(--violet);"></div></div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-label"><span>🟢 Match / Jeu libre</span><span>15 min</span></div>
+      <div class="stat-bar"><div class="stat-fill" style="width:20%; background:var(--vert);"></div></div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-label"><span>⚪ Retour au calme + debriefing</span><span>5 min</span></div>
+      <div class="stat-bar"><div class="stat-fill" style="width:6%; background:#aaa;"></div></div>
+    </div>
+  </div>
+
+  <div class="section-title">Les 5 phases de la saison</div>
+
+  <div class="card">
+    <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+      <span class="badge badge-prep">Phase 1</span>
+      <span style="font-weight:700;">Fin août · Reprise express — 3 semaines, ~6 séances</span>
+    </div>
+    <p style="font-size:13px; color:#c0d0c4; margin-bottom:10px;">Pas de joueurs en juillet : c'est la norme en club amateur familial, pas un problème. À 14-15 ans la condition se reconstruit par le jeu — on priorise sans pitié sur les 6 séances disponibles :</p>
+    <ul class="exo-steps" style="font-size:13px;">
+      <li><strong>Semaine 1 (séances 1-2)</strong> : 100% cohésion et plaisir. Beaucoup de jeu, zéro consigne. Objectif caché : observer qui est qui, qui sait faire quoi.</li>
+      <li><strong>Semaine 2 (séances 3-4)</strong> : bases techniques (passe, conduite) + première découverte du grand terrain pour ceux qui viennent du foot à 8. Intensité en montée douce.</li>
+      <li><strong>Semaine 3 (séances 5-6)</strong> : jeu à 11, occupation des espaces, un match d'entraînement grandeur nature. Les joueurs arrivent au premier match en sachant à peu près où se placer.</li>
+    </ul>
+    <div class="tip" style="margin-top:10px;"><strong>⚠️ Vigilance blessures</strong>Les 2-3 premières semaines après la coupure sont celles où il y a le plus de blessures (ischios, chevilles). Échauffements soignés, pas de frappes à froid, pas de sprints max en séance 1. Et accepte que les premiers matchs soient brouillons — toute ta poule est dans le même cas.</div>
+    <div class="mat-chips">
+      <span class="chip">Physique 40%</span><span class="chip">Technique 35%</span><span class="chip">Plaisir 25%</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+      <span class="badge badge-comp">Phase 2</span>
+      <span style="font-weight:700;">Septembre – Décembre · Compétition 1 — Bases tactiques</span>
+    </div>
+    <p style="font-size:13px; color:#c0d0c4;">Introduction progressive du foot à 11. Notions de base : organisation défensive (bloc équipe), construction simple, rôles des postes. Travail technique continu.</p>
+    <div class="mat-chips">
+      <span class="chip">Technique 40%</span><span class="chip">Tactique 35%</span><span class="chip">Physique 25%</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+      <span class="badge badge-treve">Phase 3</span>
+      <span style="font-weight:700;">Janvier · Trêve hivernale — Bilan & consolidation</span>
+    </div>
+    <p style="font-size:13px; color:#c0d0c4;">Moins de matches. Travail ciblé sur les lacunes identifiées. Exercices de finition, de conservation. Séances plus courtes et légères si conditions hivernales.</p>
+    <div class="mat-chips">
+      <span class="chip">Technique 50%</span><span class="chip">Physique 30%</span><span class="chip">Mental 20%</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+      <span class="badge badge-comp">Phase 4</span>
+      <span style="font-weight:700;">Février – Avril · Compétition 2 — Montée en puissance</span>
+    </div>
+    <p style="font-size:13px; color:#c0d0c4;">Tactique plus approfondie : pressing, transitions, phases fixes (corners, coups francs). Intensité des séances augmentée. Les joueurs connaissent mieux leurs rôles.</p>
+    <div class="mat-chips">
+      <span class="chip">Tactique 45%</span><span class="chip">Technique 35%</span><span class="chip">Physique 20%</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+      <span class="badge badge-fin">Phase 5</span>
+      <span style="font-weight:700;">Mai – Juin · Fin de saison — Bilan & fête</span>
+    </div>
+    <p style="font-size:13px; color:#c0d0c4;">Dernier tiers de saison. Tournois amicaux. Bilan individuel. Valoriser les progrès de chaque joueur. Préparer la saison suivante dans la bonne humeur.</p>
+    <div class="mat-chips">
+      <span class="chip">Jeu 50%</span><span class="chip">Plaisir 30%</span><span class="chip">Bilan 20%</span>
+    </div>
+  </div>
+
+  <div class="section-title">Calendrier mois par mois</div>
+  <div class="months-grid">
+    <div class="month-card"><div class="mname">Juillet</div><div class="mtheme">Vacances — pas d'entraînement</div><div class="mphase">Repos / foot libre entre copains</div></div>
+    <div class="month-card"><div class="mname">Août</div><div class="mtheme">Reprise express (fin août)</div><div class="mphase">Préparation · 3 semaines</div></div>
+    <div class="month-card"><div class="mname">Septembre</div><div class="mtheme">Technique de base</div><div class="mphase">Compétition 1</div></div>
+    <div class="month-card"><div class="mname">Octobre</div><div class="mtheme">Jeu à 11 — espace</div><div class="mphase">Compétition 1</div></div>
+    <div class="month-card"><div class="mname">Novembre</div><div class="mtheme">Défense collective</div><div class="mphase">Compétition 1</div></div>
+    <div class="month-card"><div class="mname">Décembre</div><div class="mtheme">Attaque organisée</div><div class="mphase">Compétition 1</div></div>
+    <div class="month-card"><div class="mname">Janvier</div><div class="mtheme">Bilan & lacunes</div><div class="mphase">Trêve</div></div>
+    <div class="month-card"><div class="mname">Février</div><div class="mtheme">Pressing & transitions</div><div class="mphase">Compétition 2</div></div>
+    <div class="month-card"><div class="mname">Mars</div><div class="mtheme">Phases fixes</div><div class="mphase">Compétition 2</div></div>
+    <div class="month-card"><div class="mname">Avril</div><div class="mtheme">Intensité & vitesse</div><div class="mphase">Compétition 2</div></div>
+    <div class="month-card"><div class="mname">Mai</div><div class="mtheme">Tournois & plaisir</div><div class="mphase">Fin de saison</div></div>
+    <div class="month-card"><div class="mname">Juin</div><div class="mtheme">Bilan & fête</div><div class="mphase">Fin de saison</div></div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════ PAGE 2 : SÉANCES TYPE -->
+<div class="page" id="page-seances">
+
+  <div class="section-title">Le minutage des 2 séances de la semaine</div>
+  <p style="font-size:13px; color:var(--gris); margin-bottom:12px;">Voici juste le <strong>découpage horaire</strong> de tes deux séances hebdomadaires (pas leur contenu). Le contenu, lui, se trouve plus bas dans les « semaines types ».</p>
+  <div class="semaine-type">
+    <div class="jour-card">
+      <h4>🗓️ Séance du mardi — type apprentissage</h4>
+      <ul class="timeline">
+        <li><span class="t-time">0–5'</span><span class="t-type">Arrivée / installation plots</span></li>
+        <li><span class="t-time">5–15'</span><span class="t-type">Échauffement dynamique</span></li>
+        <li><span class="t-time">15–35'</span><span class="t-type">🔵 Exercice technique ciblé</span></li>
+        <li><span class="t-time">35–55'</span><span class="t-type">🟣 Jeu réduit thématique</span></li>
+        <li><span class="t-time">55–70'</span><span class="t-type">🟢 Match libre 7v7</span></li>
+        <li><span class="t-time">70–75'</span><span class="t-type">⚪ Debriefing en cercle</span></li>
+      </ul>
+    </div>
+    <div class="jour-card">
+      <h4>🗓️ Séance du vendredi — type jeu</h4>
+      <ul class="timeline">
+        <li><span class="t-time">0–5'</span><span class="t-time" style="width:auto">Arrivée</span></li>
+        <li><span class="t-time">5–15'</span><span class="t-type">Jeu d'activation ludique</span></li>
+        <li><span class="t-time">15–30'</span><span class="t-type">🟣 Situation tactique simple</span></li>
+        <li><span class="t-time">30–50'</span><span class="t-type">⚽ Jeu global (match à thème)</span></li>
+        <li><span class="t-time">50–70'</span><span class="t-type">🟢 Match officieux 8v8</span></li>
+        <li><span class="t-time">70–75'</span><span class="t-type">⚪ Questions / bonne humeur</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Les séances, organisées par semaine type</div>
+  <p style="font-size:13px; color:var(--gris); margin-bottom:6px;">Les 10 séances sont regroupées en <strong>5 semaines types</strong>, une par phase de la saison. Chaque semaine type = une <strong>séance du mardi</strong> (plutôt apprentissage) + une <strong>séance du vendredi</strong> (plutôt jeu). Tu rejoues une même semaine type pendant plusieurs semaines, en augmentant la difficulté grâce aux variantes des exercices.</p>
+  <div class="tip" style="max-width:none; margin-bottom:8px;"><strong>❄️ Et la trêve de janvier ?</strong>Pendant la trêve, tu rejoues les semaines types 2 et 3 en allégeant l'intensité (terrain souvent gras/froid) et en ciblant les points faibles repérés.</div>
+
+  <div class="section-title" style="font-size:18px; margin-top:30px;">Semaine type 1 · Reprise express (fin août, 3 semaines)</div>
+
+  <div class="seance-wrap" id="s1">
+    <div class="seance-header" onclick="toggleSeance('s1')">
+      <div class="snum" style="font-size:14px; letter-spacing:1px;">MAR</div>
+      <div class="sinfo">
+        <h3>Reprise & prise de contact</h3>
+        <p>🗓️ Séance du mardi · Reprise physique & technique de base · Préparation</p>
+      </div>
+      <div class="sarrow">▶</div>
+    </div>
+    <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : Reprendre en confiance et avec plaisir</strong>Tout est simple aujourd'hui : gestes de base, jeu libre, zéro pression. L'objectif caché : observer les niveaux.</span></div>
+      <div class="exo-block phys">
+        <div class="exo-label phys">⏱ 15 min · Échauffement</div>
+        <div class="exo-title">Le Zapping — Montée progressive en 4 phases</div>
+        <div class="exo-duration">Matériel : 8 cônes · 1 ballon par joueur · Espace : moitié de terrain · Les 4 phases s'enchaînent UNE fois, dans l'ordre</div>
+        <ul class="exo-steps">
+          <li><strong>Phase 1 (3 min) — Mise en route ballon :</strong> jonglage libre à l'arrêt puis en marchant (débutants : main autorisée, intermédiaires : pied)</li>
+          <li><strong>Phase 2 (4 min) — Jogging à thèmes :</strong> course libre sur la moitié de terrain, changement de direction au signal (voix, sifflet, geste)</li>
+          <li><strong>Phase 3 (5 min) — Navettes en intensité croissante :</strong> sur 2 plots espacés de 10 m : course avant → retour en arrière → pas chassés latéraux, de plus en plus vite à chaque passage</li>
+          <li><strong>Phase 4 (3 min) — Accélérations progressives :</strong> 3-4 lignes droites de 20 m en montant à ~80% de la vitesse max, puis mobilité rapide (hanches, chevilles)</li>
+        </ul>
+        <div class="tip"><strong>💡 Astuce éduc</strong>L'intensité ne fait que monter : on finit prêt à jouer, jamais essoufflé. Et ne t'inquiète pas pour l'endurance de reprise — elle ne vient pas de l'échauffement mais du cumul de la séance : le 3v3 et le match génèrent bien plus de charge cardio qu'un footing, et de façon intermittente comme en match. La condition physique se reconstruit sur les semaines de la phase 1, pas en une séance.</div>
+      </div>
+
+      <div class="exo-block tech">
+        <div class="exo-label tech">⏱ 20 min · Technique</div>
+        <div class="exo-title">Passe & va — Le fondamental</div>
+        <div class="exo-duration">Matériel : 1 ballon pour 2 · Plots pour délimiter · Groupes de 2</div>
+        <ul class="exo-steps">
+          <li>En binôme, face à face à 6m : passe intérieur du pied, réception et contrôle</li>
+          <li>Augmente la distance à 10m après 5 min si c'est fluide</li>
+          <li>Variante : après la passe, le passeur court et touche le plot derrière son partenaire</li>
+          <li>Dernier tour : passe + déplacement + contrôle orienté (se retourner après contrôle)</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-passe-va', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g1', this)">🧤 Gardien : prises de balle (G1)</button>
+        <div class="tip"><strong>💡 Astuce éduc</strong>Pour les débutants : montre d'abord en slow-motion le bon appui du pied (intérieur, pied à plat). Un geste juste vaut mieux que 100 passes mal faites.</div>
+      </div>
+
+      <div class="exo-block tact">
+        <div class="exo-label tact">⏱ 20 min · Jeu réduit</div>
+        <div class="exo-title">3v3 dans des petites cages — Liberté totale</div>
+        <div class="exo-duration">Matériel : 4 petits buts · 4 équipes de 4 joueurs · 2 terrains côte à côte</div>
+        <ul class="exo-steps">
+          <li>Terrain 20x15m avec 2 petites cages de chaque côté</li>
+          <li>Match de 5 min, rotation des équipes</li>
+          <li>Règle : pas de gardien — on tire de partout !</li>
+          <li>Score réinitialisé à chaque rotation — tout le monde peut gagner</li>
+        </ul>
+      </div>
+
+      <div class="exo-block jeu">
+        <div class="exo-label jeu">⏱ 15 min · Match</div>
+        <div class="exo-title">7v7 ou 8v8 — Match libre</div>
+        <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Aujourd'hui on joue, on tente, on se trompe — et c'est parfait comme ça. »</em></li>
+          <li>Match sans consigne tactique — laisse jouer !</li>
+          <li>Mélange les niveaux dans les équipes</li>
+          <li>Encourage les prises de risque, même ratées</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="seance-wrap" id="s2">
+    <div class="seance-header" onclick="toggleSeance('s2')">
+      <div class="snum" style="font-size:14px; letter-spacing:1px;">VEN</div>
+      <div class="sinfo">
+        <h3>Conduite de balle & dribble</h3>
+        <p>🗓️ Séance du vendredi · Technique individuelle, plus ludique · Préparation</p>
+      </div>
+      <div class="sarrow">▶</div>
+    </div>
+    <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : Oser la conduite et le 1v1</strong>Chaque bloc pousse à provoquer balle au pied : slalom, duel, portes, puis match à touches limitées pour réinvestir.</span></div>
+      <div class="exo-block phys">
+        <div class="exo-label phys">⏱ 15 min · Échauffement</div>
+        <div class="exo-title">Le labyrinthe de plots</div>
+        <div class="exo-duration">Matériel : 15 cônes disposés en zigzag sur 15m</div>
+        <ul class="exo-steps">
+          <li>Conduite de balle en slalom entre les plots : pied droit puis pied gauche</li>
+          <li>Retour en sprint sans ballon</li>
+          <li>Variante : toucher les plots alternativement avec la main droite/gauche en accélérant</li>
+          <li>3 passages chacun</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-slalom', this)">📐 Voir le schéma</button>
+      </div>
+
+      <div class="exo-block tech">
+        <div class="exo-label tech">⏱ 20 min · Technique</div>
+        <div class="exo-title">Le dribble entre 2 plots — 1v1 progressif</div>
+        <div class="exo-duration">Matériel : plots pour délimiter couloirs (2m large x 8m long) · 1 ballon par couloir</div>
+        <ul class="exo-steps">
+          <li>Couloirs de 2m de large : attaquant tente de dépasser défenseur passif puis semi-actif</li>
+          <li>Apprenez 2 gestes : le crochet intérieur et le passement de jambe simplifié</li>
+          <li>Défenseur ne peut se déplacer que latéralement au début</li>
+          <li>Après 10 min : défenseur libre → vrai 1v1</li>
+          <li>Rotation toutes les 2 min</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-1v1', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g2', this)">🧤 Gardien : appuis & déplacements (G2)</button>
+        <div class="tip"><strong>💡 Astuce éduc</strong>Les débutants auront du mal avec le 1v1. C'est normal ! Valorise le fait de tenter, pas le résultat. Un dribble raté mais essayé = progression.</div>
+      </div>
+
+      <div class="exo-block tact">
+        <div class="exo-label tact">⏱ 20 min · Jeu réduit</div>
+        <div class="exo-title">4v4 — Terrain avec portes</div>
+        <div class="exo-duration">Matériel : 8 plots formant 4 "portes" (2 plots espacés de 2m)</div>
+        <ul class="exo-steps">
+          <li>Terrain 25x20m, 4 portes dispersées sur le terrain</li>
+          <li>1 point = passer dans une porte en conduite de balle</li>
+          <li>Pas de gardien, pas de grandes cages = libère les attaquants</li>
+          <li>Oblige à chercher l'espace et la conduite plutôt que le tir</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-portes', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g2', this)">🧤 Gardien : appuis & déplacements (G2)</button>
+      </div>
+
+      <div class="exo-block jeu">
+        <div class="exo-label jeu">⏱ 15 min · Match</div>
+        <div class="exo-title">Match — Règle : 3 touches max</div>
+        <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Tout ce qu'on a fait en 1v1, c'est le moment de le tenter en vrai. »</em></li>
+          <li>Match 8v8 avec règle : maximum 3 touches par possession</li>
+          <li>Oblige à regarder avant de recevoir le ballon</li>
+          <li>Pas de sanction si dépassé — juste encourager l'habitude</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin-top:30px;">Semaine type 2 · Compétition 1, début (septembre-octobre)</div>
+
+  <div class="seance-wrap" id="s3">
+    <div class="seance-header" onclick="toggleSeance('s3')">
+      <div class="snum" style="font-size:14px; letter-spacing:1px;">MAR</div>
+      <div class="sinfo">
+        <h3>Jeu à 11 — Introduction des espaces</h3>
+        <p>🗓️ Séance du mardi · Tactique de base, largeur & profondeur · Compétition 1</p>
+      </div>
+      <div class="sarrow">▶</div>
+    </div>
+    <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : L'espace et la largeur</strong>Du rondo (espace réduit) aux couloirs (largeur imposée) jusqu'au grand terrain : le même apprentissage à trois échelles.</span></div>
+      <div class="exo-block phys">
+        <div class="exo-label phys">⏱ 15 min · Échauffement</div>
+        <div class="exo-title">Rondo 5v2 — Conservation simple</div>
+        <div class="exo-duration">Matériel : plots délimitant un carré 8x8m · groupes de 7</div>
+        <ul class="exo-steps">
+          <li>5 joueurs en cercle, 2 au milieu essaient de récupérer le ballon</li>
+          <li>Si le ballon est intercepté, l'auteur de la mauvaise passe prend la place au centre</li>
+          <li>Maximum 2 touches pour les plus avancés</li>
+          <li>Faire 2 groupes en parallèle</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-rondo', this)">📐 Voir le schéma</button>
+        <div class="tip"><strong>💡 Astuce éduc</strong>Le rondo est le meilleur échauffement technique. Les barcelonais l'utilisent à tous les niveaux. Simple à mettre en place et adoré des joueurs.</div>
+      </div>
+
+      <div class="exo-block tact">
+        <div class="exo-label tact">⏱ 20 min · Tactique</div>
+        <div class="exo-title">Les couloirs — Comprendre la largeur</div>
+        <div class="exo-duration">Matériel : plots pour diviser le terrain en 3 couloirs verticaux</div>
+        <ul class="exo-steps">
+          <li>Terrain divisé en 3 couloirs (gauche, centre, droite)</li>
+          <li>Règle : max 2 joueurs par couloir en même temps</li>
+          <li>Oblige à occuper tout le terrain et à chercher les ailes</li>
+          <li>6v6 avec cette règle, discussion après sur ce que ça a changé</li>
+          <li>Mot clé à enseigner : "Je suis libre !" pour demander le ballon</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-couloirs', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g4', this)">🧤 Gardien : jeu au pied & relances (G4)</button>
+      </div>
+
+      <div class="exo-block jeu">
+        <div class="exo-label jeu">⏱ 30 min · Match global</div>
+        <div class="exo-title">9v9 ou 10v10 — Terrain complet</div>
+        <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Comme dans les couloirs : occupez tout le terrain, cherchez les côtés libres. »</em></li>
+          <li>Premier match à 11 sur terrain quasi complet</li>
+          <li>Consigne simple : "occupez tout le terrain, ne vous collez pas"</li>
+          <li>Stop le jeu 1 ou 2 fois maximum pour pointer un espace libre — pas plus !</li>
+          <li>Laisse les joueurs vivre l'expérience du grand terrain</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="seance-wrap" id="s4">
+    <div class="seance-header" onclick="toggleSeance('s4')">
+      <div class="snum" style="font-size:14px; letter-spacing:1px;">VEN</div>
+      <div class="sinfo">
+        <h3>Finition & tir au but</h3>
+        <p>🗓️ Séance du vendredi · Technique offensive, proche du match · Compétition 1</p>
+      </div>
+      <div class="sarrow">▶</div>
+    </div>
+    <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : La finition</strong>Frapper juste, dans toutes les situations : ateliers, 2v1, puis match qui récompense la construction avant le tir.</span></div>
+      <div class="exo-block phys">
+        <div class="exo-label phys">⏱ 15 min · Échauffement</div>
+        <div class="exo-title">Montée en température avant les frappes</div>
+        <div class="exo-duration">Matériel : 1 ballon pour 2 · plots</div>
+        <ul class="exo-steps">
+          <li>Jogging + mobilité hanches/chevilles 4 min — jamais de frappe à froid</li>
+          <li>Passes par 2 en augmentant progressivement la distance et la force</li>
+          <li>Gammes de frappe légères à 8 m, sans viser, juste pour chauffer le geste</li>
+          <li>2-3 accélérations progressives pour finir</li>
+        </ul>
+        <div class="tip"><strong>💡 Astuce éduc</strong>Les frappes sollicitent fortement les ischio-jambiers. Un claquage sur frappe à froid est le classique des séances de finition — ces 15 minutes ne sont pas négociables.</div>
+      </div>
+
+      <div class="exo-block tech">
+        <div class="exo-label tech">⏱ 20 min · Technique</div>
+        <div class="exo-title">Circuit de finition — 4 ateliers</div>
+        <div class="exo-duration">Matériel : grandes cages · 4 plots repères · ballons en nombre</div>
+        <ul class="exo-steps">
+          <li>Atelier 1 : tir en course depuis 15m (coup droit)</li>
+          <li>Atelier 2 : tir après contrôle orienté (ballon posé au sol, tu te retournes et tu tires)</li>
+          <li>Atelier 3 : tir en une touche sur centre latéral</li>
+          <li>Atelier 4 : face au but avec gardien — feinte puis tir</li>
+          <li>Rotation toutes les 4 min</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-finition', this)">📐 Voir le schéma</button>
+      </div>
+
+      <div class="exo-block tact">
+        <div class="exo-label tact">⏱ 20 min · Jeu réduit</div>
+        <div class="exo-title">2v1 + gardien — Situation de but</div>
+        <ul class="exo-steps">
+          <li>2 attaquants vs 1 défenseur + gardien</li>
+          <li>Attaquants partent du milieu, défenseur démarre depuis la ligne des 20m</li>
+          <li>Apprenez la règle : "l'attaquant sans ballon doit bouger pour créer l'espace"</li>
+          <li>Rotation toutes les 3 actions</li>
+        </ul>
+      </div>
+
+      <div class="exo-block jeu">
+        <div class="exo-label jeu">⏱ 20 min · Match à thème</div>
+        <div class="exo-title">Match — But valide = suite d'au moins 3 passes</div>
+        <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Les frappes des ateliers, maintenant en situation réelle : cherchez la position de tir. »</em></li>
+          <li>But ne compte que si l'équipe a réalisé 3 passes avant le tir</li>
+          <li>Encourage la combinaison plutôt que le tir immédiat</li>
+          <li>Double les points si tir de l'extérieur de la surface</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin-top:30px;">Semaine type 3 · Compétition 1, approfondissement (novembre-décembre)</div>
+
+  <div class="seance-wrap" id="s5">
+    <div class="seance-header" onclick="toggleSeance('s5')">
+      <div class="snum" style="font-size:14px; letter-spacing:1px;">MAR</div>
+      <div class="sinfo">
+        <h3>Conservation & jeu court</h3>
+        <p>🗓️ Séance du mardi · Garder le ballon, jouer simple · Compétition 1</p>
+      </div>
+      <div class="sarrow">▶</div>
+    </div>
+    <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : Conserver et bouger après la passe</strong>Le mot d'ordre unique de la séance : « bouge après ta passe ». Il traverse le triangle, le 6v3 et le match.</span></div>
+      <div class="exo-block phys">
+        <div class="exo-label phys">⏱ 15 min · Échauffement</div>
+        <div class="exo-title">La balle au capitaine — passes en mouvement</div>
+        <div class="exo-duration">Matériel : 1 ballon pour 4 · espace libre</div>
+        <ul class="exo-steps">
+          <li>Groupes de 4, ils se passent le ballon en marchant puis en trottinant</li>
+          <li>Consigne : annoncer le prénom de celui à qui on passe</li>
+          <li>Après 5 min : interdiction de repasser au joueur qui vient de te donner le ballon</li>
+          <li>Termine par 2 min d'étirements dynamiques</li>
+        </ul>
+      </div>
+
+      <div class="exo-block tech">
+        <div class="exo-label tech">⏱ 20 min · Technique</div>
+        <div class="exo-title">Passe et soutien — le triangle mobile</div>
+        <div class="exo-duration">Matériel : plots · 1 ballon pour 3</div>
+        <ul class="exo-steps">
+          <li>Trios : un porteur, deux soutiens placés en triangle</li>
+          <li>Le porteur passe puis se repositionne pour rester en triangle (jamais aligné)</li>
+          <li>Consigne clé : « toujours deux solutions de passe pour le porteur »</li>
+          <li>Variante : ajoute un défenseur passif qui gêne une des options</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-passe-va', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g3', this)">🧤 Gardien : plongeons par paliers (G3)</button>
+        <div class="tip"><strong>💡 Astuce éduc</strong>Le mot magique à répéter toute la séance : « bouge après ta passe ! ». Un joueur qui passe et reste planté est le plus gros défaut à corriger à cet âge.</div>
+      </div>
+
+      <div class="exo-block tact">
+        <div class="exo-label tact">⏱ 20 min · Jeu réduit</div>
+        <div class="exo-title">Conservation 6v3 — la supériorité numérique</div>
+        <div class="exo-duration">Matériel : plots zone 25x25m · chasubles</div>
+        <ul class="exo-steps">
+          <li>6 joueurs conservent contre 3 défenseurs dans une zone</li>
+          <li>Objectif des 6 : enchaîner 8 passes = 1 point</li>
+          <li>Si les 3 récupèrent, ils échangent avec ceux qui ont perdu le ballon</li>
+          <li>Pour les forts : limite à 2 touches de balle</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-conservation', this)">📐 Voir le schéma</button>
+      </div>
+
+      <div class="exo-block jeu">
+        <div class="exo-label jeu">⏱ 15 min · Match</div>
+        <div class="exo-title">Match — zone de conservation obligatoire</div>
+        <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Le mot du jour reste le même : bouge après ta passe. »</em></li>
+          <li>Match 8v8 normal</li>
+          <li>Règle : avant de marquer, l'équipe doit faire 1 passe dans son propre camp</li>
+          <li>Empêche le jeu « tout devant » et récompense la construction</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="seance-wrap" id="s6">
+    <div class="seance-header" onclick="toggleSeance('s6')">
+      <div class="snum" style="font-size:14px; letter-spacing:1px;">VEN</div>
+      <div class="sinfo">
+        <h3>Défense collective — le bloc équipe</h3>
+        <p>🗓️ Séance du vendredi · Défendre ensemble · Compétition 1</p>
+      </div>
+      <div class="sarrow">▶</div>
+    </div>
+    <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : Défendre ensemble</strong>La ligne qui glisse, le bloc compact : les miroirs préparent le rideau, le rideau prépare le match compact.</span></div>
+      <div class="exo-block phys">
+        <div class="exo-label phys">⏱ 15 min · Échauffement</div>
+        <div class="exo-title">Les ombres — déplacements défensifs</div>
+        <div class="exo-duration">Matériel : aucun · par 2</div>
+        <ul class="exo-steps">
+          <li>Par 2 face à face : l'un mène (pas chassés gauche/droite), l'autre imite en miroir</li>
+          <li>Travaille la position défensive : genoux fléchis, sur les appuis</li>
+          <li>Changement de rôle toutes les 30 secondes</li>
+          <li>Finir par quelques accélérations courtes</li>
+        </ul>
+      </div>
+
+      <div class="exo-block tact">
+        <div class="exo-label tact">⏱ 25 min · Tactique</div>
+        <div class="exo-title">Le rideau défensif — bouger ensemble</div>
+        <div class="exo-duration">Matériel : plots marquant une ligne · chasubles</div>
+        <ul class="exo-steps">
+          <li>4 défenseurs reliés par une « corde imaginaire » se déplacent latéralement ensemble</li>
+          <li>L'éducateur (ou un attaquant) porte le ballon de gauche à droite ; la ligne suit</li>
+          <li>Consigne : « quand le ballon va à droite, toute la ligne glisse à droite »</li>
+          <li>Puis on ajoute des attaquants : la ligne défend sans se faire trouer</li>
+          <li>Mot clé : « on monte / on descend ensemble »</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-bloc', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g1', this)">🧤 Gardien : prises de balle (G1)</button>
+        <div class="tip"><strong>💡 Astuce éduc</strong>Pour visualiser le bloc, fais-leur tenir une vraie corde ou un élastique au début. Quand ils sentent qu'ils sont reliés, le concept rentre tout seul.</div>
+      </div>
+
+      <div class="exo-block jeu">
+        <div class="exo-label jeu">⏱ 20 min · Match à thème</div>
+        <div class="exo-title">Match — défense compacte</div>
+        <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Comme le rideau : on glisse ensemble, on reste à moins de 25 mètres. »</em></li>
+          <li>Match 8v8 ; l'équipe qui défend doit garder maximum 25m entre son dernier défenseur et son attaquant le plus avancé</li>
+          <li>L'éducateur arrête le jeu si le bloc est trop étiré et le montre</li>
+          <li>Bonus : 1 point si l'équipe récupère le ballon collectivement (pressing groupé)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin-top:30px;">Semaine type 4 · Compétition 2 (février-avril)</div>
+
+  <div class="seance-wrap" id="s7">
+    <div class="seance-header" onclick="toggleSeance('s7')">
+      <div class="snum" style="font-size:14px; letter-spacing:1px;">MAR</div>
+      <div class="sinfo">
+        <h3>Transitions rapides</h3>
+        <p>🗓️ Séance du mardi · Passer vite de défense à attaque · Compétition 2</p>
+      </div>
+      <div class="sarrow">▶</div>
+    </div>
+    <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : La transition rapide</strong>« Ballon récupéré = je lève la tête. » Réaction au signal, contre en 8 secondes, match à bonus transition.</span></div>
+      <div class="exo-block phys">
+        <div class="exo-label phys">⏱ 15 min · Échauffement</div>
+        <div class="exo-title">Réaction au signal — départs explosifs</div>
+        <div class="exo-duration">Matériel : plots · 1 ballon</div>
+        <ul class="exo-steps">
+          <li>Jogging en groupe ; au signal « GO », sprint de 10m puis retour</li>
+          <li>Varie les signaux : voix, sifflet, geste de la main</li>
+          <li>Ajoute un ballon : au signal, le premier qui touche le ballon mène l'action</li>
+          <li>Étirements dynamiques pour finir</li>
+        </ul>
+      </div>
+
+      <div class="exo-block tact">
+        <div class="exo-label tact">⏱ 25 min · Situation</div>
+        <div class="exo-title">Le contre éclair — 3v2 puis 2v1</div>
+        <div class="exo-duration">Matériel : terrain moitié · grandes cages + gardien</div>
+        <ul class="exo-steps">
+          <li>Dès qu'une équipe récupère le ballon, elle a 8 secondes pour attaquer</li>
+          <li>Situation de départ 3 attaquants vs 2 défenseurs, puis transition immédiate</li>
+          <li>Consigne offensive : « regarde vers l'avant dès que tu récupères »</li>
+          <li>Consigne défensive : « le premier défenseur ralentit, les autres reviennent »</li>
+          <li>Chronomètre les 8 secondes à voix haute pour créer l'urgence</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-contre', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g5', this)">🧤 Gardien : sorties aériennes (G5)</button>
+        <div class="tip"><strong>💡 Astuce éduc</strong>La transition, c'est le moment où on gagne le plus de buts à ce niveau. Apprends-leur le réflexe : « ballon récupéré = je lève la tête ».</div>
+      </div>
+
+      <div class="exo-block jeu">
+        <div class="exo-label jeu">⏱ 20 min · Match</div>
+        <div class="exo-title">Match — bonus transition</div>
+        <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Ballon récupéré = je lève la tête. C'est le seul réflexe qu'on cherche. »</em></li>
+          <li>Match 8v8 normal</li>
+          <li>But marqué dans les 10 secondes après une récupération = compte double</li>
+          <li>Encourage à attaquer vite quand l'adversaire est déséquilibré</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="seance-wrap" id="s8">
+    <div class="seance-header" onclick="toggleSeance('s8')">
+      <div class="snum" style="font-size:14px; letter-spacing:1px;">VEN</div>
+      <div class="sinfo">
+        <h3>Jeu de tête & duels</h3>
+        <p>🗓️ Séance du vendredi · Initiation en douceur · Compétition 2</p>
+      </div>
+      <div class="sarrow">▶</div>
+    </div>
+    <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : Le duel maîtrisé</strong>Tête et corps à corps abordés par paliers de confiance, puis réinvestis dans le match à bonus tête.</span></div>
+      <div class="exo-block phys">
+        <div class="exo-label phys">⏱ 15 min · Échauffement</div>
+        <div class="exo-title">Échauffement nuque & équilibre</div>
+        <div class="exo-duration">Matériel : 1 ballon léger pour 2</div>
+        <ul class="exo-steps">
+          <li>Mobilisation douce de la nuque (rotations lentes, jamais brutales)</li>
+          <li>Renforcement équilibre : tenir sur un pied, se passer le ballon à la main</li>
+          <li>Premiers contacts tête : se lancer le ballon et le renvoyer de la tête, à l'arrêt</li>
+        </ul>
+        <div class="tip"><strong>💡 Astuce éduc</strong>À cet âge, le jeu de tête s'introduit en douceur et reste limité. Utilise un ballon léger ou en mousse au début. Vise le front, yeux ouverts, jamais le dessus du crâne. Si un joueur a peur, ne force jamais.</div>
+      </div>
+
+      <div class="exo-block tech">
+        <div class="exo-label tech">⏱ 20 min · Technique</div>
+        <div class="exo-title">La tête maîtrisée — par paliers</div>
+        <div class="exo-duration">Matériel : ballons légers · plots</div>
+        <ul class="exo-steps">
+          <li>Palier 1 : assis, renvoyer de la tête un ballon lancé doucement</li>
+          <li>Palier 2 : debout statique, têtes vers un partenaire</li>
+          <li>Palier 3 : têtes en sautant, ballon lancé par l'éducateur</li>
+          <li>Palier 4 (forts) : tête au but sur un centre à la main</li>
+        </ul>
+        <button class="gk-link" onclick="goToGardien('gk-g5', this)">🧤 Gardien : sorties aériennes (G5)</button>
+      </div>
+
+      <div class="exo-block tact">
+        <div class="exo-label tact">⏱ 20 min · Jeu réduit</div>
+        <div class="exo-title">Le duel loyal — protéger son ballon</div>
+        <div class="exo-duration">Matériel : plots zone réduite · 1 ballon pour 2</div>
+        <ul class="exo-steps">
+          <li>Par 2 dans un petit cercle : l'un protège son ballon, l'autre tente de le sortir</li>
+          <li>Apprendre à mettre son corps entre l'adversaire et le ballon (bras écartés, pas les mains)</li>
+          <li>30 secondes par rôle puis on change</li>
+          <li>Notion clé : « utilise ton dos et tes épaules, pas tes bras »</li>
+        </ul>
+      </div>
+
+      <div class="exo-block jeu">
+        <div class="exo-label jeu">⏱ 15 min · Match</div>
+        <div class="exo-title">Match — bonus tête</div>
+        <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Ce qu'on a fait par paliers, tentez-le si vous le sentez — jamais forcé. »</em></li>
+          <li>Match normal ; but de la tête = compte triple</li>
+          <li>Encourage les centres et les sauts (sans danger)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px; margin-top:30px;">Semaine type 5 · Fin de saison & spécifiques (avril-juin)</div>
+
+  <div class="seance-wrap" id="s9">
+    <div class="seance-header" onclick="toggleSeance('s9')">
+      <div class="snum" style="font-size:14px; letter-spacing:1px;">MAR</div>
+      <div class="sinfo">
+        <h3>Vitesse, agilité & coordination</h3>
+        <p>🗓️ Séance du mardi · Travail athlétique ludique · Fin de saison</p>
+      </div>
+      <div class="sarrow">▶</div>
+    </div>
+    <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : La vivacité</strong>Appuis, réaction, changements de direction — tout est court et explosif, jamais long et épuisant.</span></div>
+      <div class="exo-block phys">
+        <div class="exo-label phys">⏱ 15 min · Échauffement</div>
+        <div class="exo-title">L'échelle de rythme (avec plots)</div>
+        <div class="exo-duration">Matériel : plots posés en échelle au sol</div>
+        <ul class="exo-steps">
+          <li>Pose 8 plots espacés de 50 cm pour simuler une échelle d'agilité</li>
+          <li>Passages : un appui par case, puis deux appuis, puis pas chassés latéraux</li>
+          <li>Termine en accélérant sur 10m après la dernière case</li>
+          <li>3 passages par variante</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-echelle', this)">📐 Voir le schéma</button>
+      </div>
+
+      <div class="exo-block phys">
+        <div class="exo-label phys">⏱ 20 min · Physique</div>
+        <div class="exo-title">Circuit vitesse-réaction — 3 ateliers</div>
+        <div class="exo-duration">Matériel : plots de couleurs · 1 ballon par atelier</div>
+        <ul class="exo-steps">
+          <li>Atelier 1 : sprint en slalom entre plots puis frappe au but</li>
+          <li>Atelier 2 : course arrière jusqu'à un plot, puis sprint avant au signal</li>
+          <li>Atelier 3 : l'éducateur annonce une couleur, le joueur sprinte vers le plot de cette couleur</li>
+          <li>Rotation toutes les 5 min, récupération entre les passages</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-slalom', this)">📐 Voir le schéma (slalom)</button>
+        <div class="tip"><strong>💡 Astuce éduc</strong>À cet âge, la coordination progresse énormément. Ces exercices sont parfaits en début de phase. Garde-les courts et explosifs : la qualité prime sur la quantité, sinon ça devient de l'endurance.</div>
+      </div>
+
+      <div class="exo-block jeu">
+        <div class="exo-label jeu">⏱ 25 min · Jeu</div>
+        <div class="exo-title">Épervier-ballon & match</div>
+        <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Toute la vivacité de la séance, réinvestissez-la dans vos changements de direction. »</em></li>
+          <li>10 min de « épervier » avec ballon : traverser le terrain en conduite sans se faire prendre</li>
+          <li>15 min de match libre pour réinvestir la vivacité</li>
+          <li>Jeu collectif qui muscle les changements de direction sans qu'ils s'en rendent compte</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="seance-wrap" id="s10">
+    <div class="seance-header" onclick="toggleSeance('s10')">
+      <div class="snum" style="font-size:14px; letter-spacing:1px;">VEN</div>
+      <div class="sinfo">
+        <h3>Phases arrêtées — corners & coups francs</h3>
+        <p>🗓️ Séance du vendredi · Coups de pied arrêtés simples · Fin de saison</p>
+      </div>
+      <div class="sarrow">▶</div>
+    </div>
+    <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : Être dangereux sur phases arrêtées</strong>2 routines simples répétées jusqu'à l'automatisme, puis un match qui les provoque volontairement.</span></div>
+      <div class="exo-block phys">
+        <div class="exo-label phys">⏱ 15 min · Échauffement</div>
+        <div class="exo-title">Rondo + mobilité avant les coups de pied</div>
+        <div class="exo-duration">Matériel : 4 plots · 1 ballon par groupe</div>
+        <ul class="exo-steps">
+          <li>Rondo 5v2 classique 8 min pour chauffer les appuis et les passes</li>
+          <li>Mobilité ciblée : hanches, ischio-jambiers, chevilles</li>
+          <li>Quelques frappes progressives à courte distance avant les vrais coups francs</li>
+        </ul>
+      </div>
+
+      <div class="exo-block tech">
+        <div class="exo-label tech">⏱ 20 min · Technique</div>
+        <div class="exo-title">Atelier frappe placée</div>
+        <div class="exo-duration">Matériel : grandes cages · plots cibles · ballons</div>
+        <ul class="exo-steps">
+          <li>Travail du corner : frappe vers une zone marquée par des plots devant le but</li>
+          <li>Travail du coup franc direct : viser une cible posée dans la cage</li>
+          <li>Chaque joueur trouve sa distance de course d'élan idéale</li>
+          <li>Identifie 2-3 tireurs naturels dans le groupe</li>
+        </ul>
+      </div>
+
+      <div class="exo-block tact">
+        <div class="exo-label tact">⏱ 25 min · Tactique</div>
+        <div class="exo-title">Routines de corner — 2 schémas simples</div>
+        <div class="exo-duration">Matériel : grandes cages + gardien · chasubles</div>
+        <ul class="exo-steps">
+          <li>Schéma 1 : 2 joueurs au premier poteau, le ballon est tiré vers eux</li>
+          <li>Schéma 2 : un joueur se place au point de penalty, les autres font écran puis libèrent l'espace</li>
+          <li>Côté défensif : attribuer un adversaire à chaque défenseur (marquage individuel)</li>
+          <li>Répéter chaque schéma plusieurs fois jusqu'à l'automatisme</li>
+          <li>Garde-le simple : 2 routines bien maîtrisées valent mieux que 6 confuses</li>
+        </ul>
+        <button class="schema-link" onclick="goToSchema('schema-corner', this)">📐 Voir le schéma</button>
+        <div class="tip"><strong>💡 Astuce éduc</strong>Les coups de pied arrêtés rapportent beaucoup de buts en U15 car les défenses sont encore désorganisées dessus. C'est un investissement rentable, même avec un groupe débutant.</div>
+      </div>
+
+      <div class="exo-block jeu">
+        <div class="exo-label jeu">⏱ 15 min · Match</div>
+        <div class="exo-title">Match — corners provoqués</div>
+        <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Nos 2 routines, à chaque corner. Rien d'autre à penser. »</em></li>
+          <li>Match 8v8 ; chaque sortie de but adverse est jouée en corner pour répéter les routines</li>
+          <li>But sur phase arrêtée = compte double</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════ PAGE 3 : EXERCICES & SCHÉMAS -->
+<div class="page" id="page-exercices">
+
+
+  <div class="section-title">Schémas d'exercices — Vue terrain</div>
+  <p style="font-size:13px; color:var(--gris); margin-bottom:12px;">Vue du dessus + description étape par étape. Les schémas suivent les conventions du dessin tactique : chaque type de trait a un sens précis. Les actions sont numérotées dans l'ordre ① ② ③.</p>
+
+  <!-- DÉFINITIONS PARTAGÉES : marqueurs de flèches réutilisés par tous les schémas -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <marker id="mk-pass" markerWidth="9" markerHeight="7" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#ffffff"/></marker>
+      <marker id="mk-move" markerWidth="9" markerHeight="7" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#f0861a"/></marker>
+      <marker id="mk-run" markerWidth="9" markerHeight="7" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#2b9ddb"/></marker>
+      <marker id="mk-green" markerWidth="9" markerHeight="7" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#1DB954"/></marker>
+      <marker id="mk-red" markerWidth="9" markerHeight="7" refX="7" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#e03a3a"/></marker>
+      <marker id="mk-shot" markerWidth="11" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0 0, 11 4.5, 0 9" fill="#f0c030"/></marker>
+    </defs>
+  </svg>
+
+  <!-- LÉGENDE DES CONVENTIONS -->
+  <div class="card" style="padding:14px 18px;">
+    <div class="card-title" style="font-size:14px;">Légende des conventions — à lire une fois</div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); gap:9px 18px; margin-top:6px;">
+      <div style="display:flex; align-items:center; gap:8px; font-size:13px;"><svg width="40" height="16"><circle cx="12" cy="8" r="7" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/></svg> Attaquant / porteur</div>
+      <div style="display:flex; align-items:center; gap:8px; font-size:13px;"><svg width="40" height="16"><circle cx="12" cy="8" r="7" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/></svg> Défenseur</div>
+      <div style="display:flex; align-items:center; gap:8px; font-size:13px;"><svg width="40" height="16"><polygon points="12,2 18,14 6,14" fill="#f0c030"/></svg> Plot / cône</div>
+      <div style="display:flex; align-items:center; gap:8px; font-size:13px;"><svg width="40" height="16"><circle cx="12" cy="8" r="5.5" fill="#fff" stroke="#111"/><circle cx="12" cy="8" r="1.8" fill="#111"/></svg> Ballon</div>
+      <div style="display:flex; align-items:center; gap:8px; font-size:13px;"><svg width="44" height="16"><line x1="2" y1="8" x2="34" y2="8" stroke="#fff" stroke-width="2.5" marker-end="url(#mk-pass)"/></svg> Passe (trait plein)</div>
+      <div style="display:flex; align-items:center; gap:8px; font-size:13px;"><svg width="44" height="16"><path d="M2 8 q5 -5 10 0 t10 0 t8 0" stroke="#2b9ddb" stroke-width="2.5" fill="none" marker-end="url(#mk-run)"/></svg> Conduite de balle (ondulé)</div>
+      <div style="display:flex; align-items:center; gap:8px; font-size:13px;"><svg width="44" height="16"><line x1="2" y1="8" x2="32" y2="8" stroke="#f0861a" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#mk-move)"/></svg> Déplacement sans ballon</div>
+      <div style="display:flex; align-items:center; gap:8px; font-size:13px;"><svg width="44" height="16"><line x1="2" y1="8" x2="30" y2="8" stroke="#f0c030" stroke-width="3.5" marker-end="url(#mk-shot)"/></svg> Tir (trait épais)</div>
+    </div>
+  </div>
+
+  <div class="card" id="schema-passe-va">
+    <div class="card-title">⚽ Exercice 1 — Passe & Va en triangle</div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 420 250" width="420" height="250" xmlns="http://www.w3.org/2000/svg">
+        <rect width="420" height="250" fill="#0d4a22" rx="8"/>
+        <rect x="14" y="14" width="392" height="222" fill="none" stroke="#ffffff33" stroke-width="1.5" rx="4"/>
+
+        <!-- arêtes du triangle (repères distance) -->
+        <line x1="96" y1="196" x2="202" y2="84" stroke="#ffffff22" stroke-width="1" stroke-dasharray="2,4"/>
+        <line x1="218" y1="84" x2="324" y2="196" stroke="#ffffff22" stroke-width="1" stroke-dasharray="2,4"/>
+        <line x1="104" y1="200" x2="316" y2="200" stroke="#ffffff22" stroke-width="1" stroke-dasharray="2,4"/>
+        <text x="138" y="146" fill="#ffffff66" font-size="10">≈ 12 m</text>
+        <text x="270" y="146" fill="#ffffff66" font-size="10">≈ 12 m</text>
+        <text x="190" y="216" fill="#ffffff66" font-size="10">≈ 12 m</text>
+
+        <!-- plots -->
+        <polygon points="90,202 97,216 83,216" fill="#f0c030"/>
+        <polygon points="210,40 217,54 203,54" fill="#f0c030"/>
+        <polygon points="330,202 337,216 323,216" fill="#f0c030"/>
+
+        <!-- action 1 : passe J1 -> J2 -->
+        <line x1="100" y1="186" x2="201" y2="86" stroke="#fff" stroke-width="2.5" marker-end="url(#mk-pass)"/>
+        <!-- action 2 : J1 suit sa passe (déplacement) -->
+        <path d="M80 188 Q 118 150 190 92" stroke="#f0861a" stroke-width="2.5" fill="none" stroke-dasharray="5,4" marker-end="url(#mk-move)"/>
+        <!-- action 3 : passe J2 -> J3 -->
+        <line x1="219" y1="86" x2="320" y2="186" stroke="#fff" stroke-width="2.5" marker-end="url(#mk-pass)"/>
+
+        <!-- joueurs -->
+        <circle cx="90" cy="188" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/>
+        <text x="90" y="192" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">J1</text>
+        <circle cx="210" cy="74" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/>
+        <text x="210" y="78" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">J2</text>
+        <circle cx="330" cy="188" r="12" fill="#1DB954" stroke="#fff" stroke-width="1.5"/>
+        <text x="330" y="192" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">J3</text>
+
+        <!-- ballon au pied de J1 -->
+        <circle cx="104" cy="180" r="5.5" fill="#fff" stroke="#111"/><circle cx="104" cy="180" r="1.8" fill="#111"/>
+
+        <!-- numéros d'action -->
+        <circle cx="148" cy="140" r="9" fill="#0a3d1f" stroke="#fff" stroke-width="1.3"/><text x="148" y="144" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">1</text>
+        <circle cx="112" cy="158" r="9" fill="#0a3d1f" stroke="#f0861a" stroke-width="1.3"/><text x="112" y="162" text-anchor="middle" fill="#f0861a" font-size="11" font-weight="bold">2</text>
+        <circle cx="272" cy="140" r="9" fill="#0a3d1f" stroke="#fff" stroke-width="1.3"/><text x="272" y="144" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">3</text>
+      </svg>
+      <div class="terrain-caption">① J1 passe à J2 · ② J1 suit sa passe et monte · ③ J2 passe à J3. Rotation continue dans le sens horaire.</div>
+    </div>
+    <ul class="exo-steps" style="margin-top:12px;">
+      <li>3 joueurs aux sommets d'un triangle (plots A, B, C) espacés de ~12m</li>
+      <li>J1 passe à J2 puis court immédiatement vers le plot C</li>
+      <li>J2 contrôle et passe à J3 qui se déplace vers B</li>
+      <li>Le mouvement est continu — on tourne dans le sens horaire</li>
+      <li>Variante : inverser le sens de rotation après 3 min</li>
+    </ul>
+    <div class="mat-chips"><span class="chip">1 ballon / trio</span><span class="chip">3 plots</span><span class="chip">Groupes de 3</span></div>
+    <div class="variantes">
+      <div class="variantes-title">Variantes — pour faire progresser sur l'année</div>
+      <div class="var-row var-easy"><span class="var-tag">Facile</span><span>Distances courtes (8 m), 2 touches autorisées, sans pression.</span></div>
+      <div class="var-row var-med"><span class="var-tag">Moyen</span><span>Distances 12 m, contrôle orienté obligatoire avant la passe.</span></div>
+      <div class="var-row var-hard"><span class="var-tag">Difficile</span><span>1 touche imposée + un défenseur passif gêne une option, tempo rapide.</span></div>
+    </div>
+  </div>
+
+  <div class="card" id="schema-rondo">
+    <div class="card-title">⚽ Exercice 2 — Rondo 5v2</div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 380 290" width="380" height="290" xmlns="http://www.w3.org/2000/svg">
+        <rect width="380" height="290" fill="#0d4a22" rx="8"/>
+        <!-- Carré de jeu -->
+        <rect x="80" y="50" width="220" height="200" fill="#0a3d1f" stroke="#ffffff44" stroke-width="1.5" rx="4"/>
+        <!-- repères distance -->
+        <text x="190" y="44" text-anchor="middle" fill="#ffffff66" font-size="10">10 m</text>
+        <text x="70" y="153" text-anchor="end" fill="#ffffff66" font-size="10">10 m</text>
+
+        <!-- plots aux coins -->
+        <polygon points="80,44 86,56 74,56" fill="#f0c030"/>
+        <polygon points="300,44 306,56 294,56" fill="#f0c030"/>
+        <polygon points="80,256 86,268 74,268" fill="#f0c030"/>
+        <polygon points="300,256 306,268 294,268" fill="#f0c030"/>
+
+        <!-- lignes de passe possibles (le tour) -->
+        <line x1="178" y1="62" x2="98" y2="138" stroke="#fff" stroke-width="2.5" marker-end="url(#mk-pass)"/>
+        <line x1="92" y1="156" x2="122" y2="222" stroke="#ffffff55" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <line x1="148" y1="232" x2="240" y2="232" stroke="#ffffff55" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <line x1="278" y1="220" x2="296" y2="156" stroke="#ffffff55" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+        <!-- pression des défenseurs -->
+        <line x1="160" y1="135" x2="120" y2="120" stroke="#e03a3a" stroke-width="2" marker-end="url(#mk-red)"/>
+        <line x1="215" y1="160" x2="255" y2="200" stroke="#e03a3a" stroke-width="2" marker-end="url(#mk-red)"/>
+
+        <!-- 5 joueurs extérieurs -->
+        <circle cx="190" cy="65" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="190" y="69" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">J1</text>
+        <circle cx="88" cy="148" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="88" y="152" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">J2</text>
+        <circle cx="130" cy="232" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="130" y="236" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">J3</text>
+        <circle cx="258" cy="232" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="258" y="236" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">J4</text>
+        <circle cx="292" cy="148" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="292" y="152" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">J5</text>
+
+        <!-- 2 défenseurs au centre -->
+        <circle cx="168" cy="142" r="12" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/><text x="168" y="146" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">D1</text>
+        <circle cx="222" cy="168" r="12" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/><text x="222" y="172" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">D2</text>
+
+        <!-- ballon -->
+        <circle cx="186" cy="78" r="5.5" fill="#fff" stroke="#111"/><circle cx="186" cy="78" r="1.8" fill="#111"/>
+
+        <!-- numéro -->
+        <circle cx="135" cy="100" r="9" fill="#0a3d1f" stroke="#fff" stroke-width="1.3"/><text x="135" y="104" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">1</text>
+      </svg>
+      <div class="terrain-caption">5 joueurs conservent sur les bords (passes ① puis tour du carré), 2 défenseurs au centre pressent pour intercepter. Auteur de la mauvaise passe → au centre.</div>
+    </div>
+    <ul class="exo-steps" style="margin-top:12px;">
+      <li>Carré de 10x10m (ou 8x8 pour plus de pression)</li>
+      <li>5 joueurs aux bords, 2 défenseurs au centre</li>
+      <li>Les 5 conservent le ballon avec max 2 touches (ou libre pour débutants)</li>
+      <li>Si interception ou ballon sorti : auteur de la faute passe au centre</li>
+      <li>Durée : 8–10 min, pause, 2ème round</li>
+    </ul>
+    <div class="mat-chips"><span class="chip">1 ballon</span><span class="chip">4 plots</span><span class="chip">7 joueurs par groupe</span></div>
+    <div class="variantes">
+      <div class="variantes-title">Variantes — pour faire progresser sur l'année</div>
+      <div class="var-row var-easy"><span class="var-tag">Facile</span><span>6v2 dans un grand carré, touches de balle libres.</span></div>
+      <div class="var-row var-med"><span class="var-tag">Moyen</span><span>5v2, maximum 2 touches par joueur.</span></div>
+      <div class="var-row var-hard"><span class="var-tag">Difficile</span><span>4v2 carré réduit, 1 touche ; l'auteur ET son voisin vont au centre.</span></div>
+    </div>
+  </div>
+
+  <div class="card" id="schema-couloirs">
+    <div class="card-title">⚽ Exercice 3 — Jeu des couloirs (largeur du terrain)</div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 420 300" width="420" height="300" xmlns="http://www.w3.org/2000/svg">
+        <rect width="420" height="300" fill="#0d4a22" rx="8"/>
+        <rect x="15" y="15" width="390" height="270" fill="none" stroke="#ffffff33" stroke-width="1.5" rx="4"/>
+        <line x1="15" y1="150" x2="405" y2="150" stroke="#ffffff33" stroke-width="1" stroke-dasharray="8,4"/>
+        <circle cx="210" cy="150" r="28" fill="none" stroke="#ffffff22" stroke-width="1"/>
+
+        <!-- couloirs -->
+        <line x1="145" y1="15" x2="145" y2="285" stroke="#f0c030" stroke-width="1.5" stroke-dasharray="6,4"/>
+        <line x1="275" y1="15" x2="275" y2="285" stroke="#f0c030" stroke-width="1.5" stroke-dasharray="6,4"/>
+        <text x="80" y="30" text-anchor="middle" fill="#f0c030" font-size="11" font-weight="bold">COULOIR G</text>
+        <text x="210" y="30" text-anchor="middle" fill="#f0c030" font-size="11" font-weight="bold">CENTRE</text>
+        <text x="340" y="30" text-anchor="middle" fill="#f0c030" font-size="11" font-weight="bold">COULOIR D</text>
+
+        <!-- buts -->
+        <rect x="178" y="11" width="64" height="6" fill="#fff"/>
+        <rect x="178" y="283" width="64" height="6" fill="#fff"/>
+
+        <!-- changement d'aile : passe longue centre -> couloir droit -->
+        <line x1="222" y1="205" x2="338" y2="190" stroke="#fff" stroke-width="2.5" marker-end="url(#mk-pass)"/>
+        <!-- conduite dans l'espace libre du couloir droit -->
+        <path d="M350 178 q6 -8 12 0 t12 0 t12 0" stroke="#2b9ddb" stroke-width="2.5" fill="none" marker-end="url(#mk-run)"/>
+        <!-- appel de balle dans le couloir gauche (déplacement) -->
+        <line x1="120" y1="180" x2="95" y2="120" stroke="#f0861a" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#mk-move)"/>
+
+        <!-- joueurs bleus -->
+        <circle cx="120" cy="195" r="11" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="210" cy="210" r="11" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="348" cy="190" r="11" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="210" cy="250" r="11" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/>
+        <!-- joueurs verts (adversaires) -->
+        <circle cx="180" cy="120" r="11" fill="#1DB954" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="250" cy="110" r="11" fill="#1DB954" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="330" cy="120" r="11" fill="#1DB954" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="210" cy="80" r="11" fill="#1DB954" stroke="#fff" stroke-width="1.5"/>
+
+        <!-- ballon -->
+        <circle cx="220" cy="200" r="5.5" fill="#fff" stroke="#111"/><circle cx="220" cy="200" r="1.8" fill="#111"/>
+
+        <!-- annotation -->
+        <rect x="18" y="252" width="116" height="30" fill="#00000099" rx="4"/>
+        <text x="76" y="265" text-anchor="middle" fill="#f0c030" font-size="10">Max 2 joueurs</text>
+        <text x="76" y="277" text-anchor="middle" fill="#f0c030" font-size="10">par couloir</text>
+
+        <!-- numéros -->
+        <circle cx="280" cy="190" r="9" fill="#0a3d1f" stroke="#fff" stroke-width="1.3"/><text x="280" y="194" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">1</text>
+        <circle cx="372" cy="166" r="9" fill="#0a3d1f" stroke="#2b9ddb" stroke-width="1.3"/><text x="372" y="170" text-anchor="middle" fill="#2b9ddb" font-size="11" font-weight="bold">2</text>
+      </svg>
+      <div class="terrain-caption">Le couloir droit est libre → ① changement d'aile (passe longue) vers l'ailier ② qui conduit dans l'espace. Pendant ce temps, appel dans le couloir gauche.</div>
+    </div>
+    <ul class="exo-steps" style="margin-top:12px;">
+      <li>Divise le terrain en 3 zones verticales avec des plots ou chasubles au sol</li>
+      <li>Règle unique : max 2 joueurs d'une même équipe dans un couloir simultanément</li>
+      <li>Si un 3ème joueur entre, son équipe perd la balle (ou lancer en touche contre)</li>
+      <li>Joue 6v6, puis discute : "qu'est-ce que vous avez dû faire pour trouver de l'espace ?"</li>
+      <li>Les joueurs trouvent naturellement la solution : occuper les couloirs vides</li>
+    </ul>
+    <div class="mat-chips"><span class="chip">8 plots ou chasubles</span><span class="chip">6v6</span><span class="chip">Terrain complet</span></div>
+    <div class="variantes">
+      <div class="variantes-title">Variantes — pour faire progresser sur l'année</div>
+      <div class="var-row var-easy"><span class="var-tag">Facile</span><span>3 couloirs, max 2 joueurs par couloir, jeu libre.</span></div>
+      <div class="var-row var-med"><span class="var-tag">Moyen</span><span>Obligation de changer de couloir au moins une fois avant de marquer.</span></div>
+      <div class="var-row var-hard"><span class="var-tag">Difficile</span><span>2 touches max + un seul joueur autorisé dans le couloir central.</span></div>
+    </div>
+  </div>
+
+  <div class="card" id="schema-pressing">
+    <div class="card-title">⚽ Exercice 4 — Introduction au pressing (Phase 4)</div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 420 270" width="420" height="270" xmlns="http://www.w3.org/2000/svg">
+        <rect width="420" height="270" fill="#0d4a22" rx="8"/>
+        <rect x="15" y="15" width="390" height="240" fill="none" stroke="#ffffff33" stroke-width="1.5" rx="4"/>
+
+        <!-- but adverse en haut + surface -->
+        <rect x="160" y="11" width="100" height="6" fill="#fff"/>
+        <rect x="120" y="15" width="180" height="46" fill="none" stroke="#ffffff33" stroke-width="1"/>
+
+        <!-- zone de pressing -->
+        <rect x="15" y="15" width="390" height="95" fill="#e03a3a18" rx="4"/>
+        <line x1="15" y1="110" x2="405" y2="110" stroke="#e03a3a" stroke-width="1.5" stroke-dasharray="8,4"/>
+        <text x="210" y="34" text-anchor="middle" fill="#e03a3a" font-size="11" font-weight="bold">ZONE DE PRESSING</text>
+        <text x="210" y="124" text-anchor="middle" fill="#e03a3a99" font-size="9">ligne de déclenchement</text>
+
+        <!-- porteur adverse (vert) avec ballon -->
+        <circle cx="150" cy="90" r="12" fill="#1DB954" stroke="#fff" stroke-width="1.5"/><text x="150" y="94" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">P</text>
+        <circle cx="164" cy="82" r="5.5" fill="#fff" stroke="#111"/><circle cx="164" cy="82" r="1.8" fill="#111"/>
+        <!-- options de passe adverses (vertes) -->
+        <circle cx="90" cy="55" r="11" fill="#1DB954" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="250" cy="60" r="11" fill="#1DB954" stroke="#fff" stroke-width="1.5"/>
+
+        <!-- D1 presse le porteur -->
+        <circle cx="150" cy="160" r="12" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/><text x="150" y="164" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">D1</text>
+        <line x1="150" y1="148" x2="150" y2="106" stroke="#e03a3a" stroke-width="2.5" marker-end="url(#mk-red)"/>
+        <!-- D2 coupe l'option gauche -->
+        <circle cx="110" cy="150" r="12" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/><text x="110" y="154" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">D2</text>
+        <line x1="104" y1="139" x2="92" y2="68" stroke="#e03a3a" stroke-width="2.5" marker-end="url(#mk-red)"/>
+        <!-- D3 coupe l'option droite -->
+        <circle cx="220" cy="155" r="12" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/><text x="220" y="159" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">D3</text>
+        <line x1="227" y1="144" x2="245" y2="73" stroke="#e03a3a" stroke-width="2.5" marker-end="url(#mk-red)"/>
+
+        <!-- options de passe barrées -->
+        <line x1="138" y1="80" x2="100" y2="60" stroke="#e03a3a" stroke-width="1.2" stroke-dasharray="3,3"/>
+        <line x1="120" y1="68" x2="108" y2="52" stroke="#e03a3a" stroke-width="2"/><line x1="108" y1="68" x2="120" y2="52" stroke="#e03a3a" stroke-width="2"/>
+        <line x1="162" y1="82" x2="240" y2="64" stroke="#e03a3a" stroke-width="1.2" stroke-dasharray="3,3"/>
+        <line x1="196" y1="68" x2="208" y2="80" stroke="#e03a3a" stroke-width="2"/><line x1="208" y1="68" x2="196" y2="80" stroke="#e03a3a" stroke-width="2"/>
+
+        <!-- annotation déclencheur -->
+        <rect x="280" y="150" width="120" height="40" fill="#00000099" rx="4"/>
+        <text x="340" y="166" text-anchor="middle" fill="#fff" font-size="10">Mot déclencheur</text>
+        <text x="340" y="182" text-anchor="middle" fill="#f0861a" font-size="13" font-weight="bold">« PRESS ! »</text>
+      </svg>
+      <div class="terrain-caption">Le porteur (P) reçoit dans la zone : D1 monte au pressing, D2 et D3 coupent les passes faciles (✗). L'adversaire est isolé et doit dégager sous pression.</div>
+    </div>
+    <ul class="exo-steps" style="margin-top:12px;">
+      <li>Définir une zone de pressing (les 30 derniers mètres adverses)</li>
+      <li>Règle : dès que la balle entre dans la zone, signal "PRESS !"</li>
+      <li>Le joueur le plus proche presse le porteur, 2 autres bloquent les passes faciles</li>
+      <li>Commencer en situation statique, puis avec mouvement, puis en jeu réel</li>
+      <li>Ne pas demander le pressing partout — seulement dans la zone définie</li>
+    </ul>
+    <div class="mat-chips"><span class="chip">Plots délimitant zone</span><span class="chip">7v7</span><span class="chip">Terrain 3/4</span></div>
+    <div class="variantes">
+      <div class="variantes-title">Variantes — pour faire progresser sur l'année</div>
+      <div class="var-row var-easy"><span class="var-tag">Facile</span><span>Porteur passif, presseurs au pas : on apprend les angles de course.</span></div>
+      <div class="var-row var-med"><span class="var-tag">Moyen</span><span>Porteur libre, déclenchement du pressing au signal « PRESS ! ».</span></div>
+      <div class="var-row var-hard"><span class="var-tag">Difficile</span><span>Jeu réel 7v7 : récupération en moins de 6 secondes = point bonus.</span></div>
+    </div>
+  </div>
+
+  <div class="card" id="schema-conservation">
+    <div class="card-title">⚽ Exercice 5 — Conservation 6v3 (supériorité numérique)</div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 400 300" width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+        <rect width="400" height="300" fill="#0d4a22" rx="8"/>
+        <rect x="40" y="40" width="320" height="220" fill="#0a3d1f" stroke="#ffffff44" stroke-width="1.5" rx="4"/>
+        <text x="200" y="32" text-anchor="middle" fill="#ffffff66" font-size="10">zone 25 × 25 m</text>
+
+        <!-- plots coins -->
+        <polygon points="40,34 46,46 34,46" fill="#f0c030"/>
+        <polygon points="360,34 366,46 354,46" fill="#f0c030"/>
+        <polygon points="40,266 46,278 34,278" fill="#f0c030"/>
+        <polygon points="360,266 366,278 354,278" fill="#f0c030"/>
+
+        <!-- passes : tour d'horloge + une passe qui traverse -->
+        <line x1="92" y1="75" x2="195" y2="62" stroke="#fff" stroke-width="2.5" marker-end="url(#mk-pass)"/>
+        <line x1="222" y1="68" x2="300" y2="120" stroke="#ffffff55" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <line x1="305" y1="160" x2="300" y2="210" stroke="#ffffff55" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+        <!-- pression défenseurs -->
+        <line x1="150" y1="135" x2="120" y2="95" stroke="#e03a3a" stroke-width="2" marker-end="url(#mk-red)"/>
+        <line x1="230" y1="150" x2="270" y2="120" stroke="#e03a3a" stroke-width="2" marker-end="url(#mk-red)"/>
+
+        <!-- 6 attaquants : 4 bords + 2 intérieurs -->
+        <circle cx="80" cy="80" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="80" y="84" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">1</text>
+        <circle cx="210" cy="58" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="210" y="62" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">2</text>
+        <circle cx="320" cy="135" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="320" y="139" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">3</text>
+        <circle cx="300" cy="225" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="300" y="229" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">4</text>
+        <circle cx="120" cy="230" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="120" y="234" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">5</text>
+        <circle cx="175" cy="160" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="175" y="164" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">6</text>
+
+        <!-- 3 défenseurs -->
+        <circle cx="135" cy="145" r="12" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/><text x="135" y="149" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">D1</text>
+        <circle cx="240" cy="160" r="12" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/><text x="240" y="164" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">D2</text>
+        <circle cx="215" cy="215" r="12" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/><text x="215" y="219" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">D3</text>
+
+        <!-- ballon -->
+        <circle cx="92" cy="72" r="5.5" fill="#fff" stroke="#111"/><circle cx="92" cy="72" r="1.8" fill="#111"/>
+        <circle cx="148" cy="62" r="9" fill="#0a3d1f" stroke="#fff" stroke-width="1.3"/><text x="148" y="66" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">1</text>
+      </svg>
+      <div class="terrain-caption">6 attaquants (4 sur les bords + 2 intérieurs) conservent contre 3 défenseurs. Objectif : 8 passes = 1 point. Le joueur intérieur (6) sert de soutien central.</div>
+    </div>
+    <ul class="exo-steps" style="margin-top:12px;">
+      <li>Zone 25×25 m délimitée par 4 plots</li>
+      <li>Les attaquants utilisent les 2 joueurs intérieurs comme appuis pour casser les lignes</li>
+      <li>Consigne : « si tu es pressé, joue vers l'appui libre »</li>
+      <li>8 passes consécutives = 1 point ; interception = les défenseurs changent</li>
+    </ul>
+    <div class="mat-chips"><span class="chip">4 plots</span><span class="chip">1 ballon</span><span class="chip">9 joueurs / groupe</span></div>
+    <div class="variantes">
+      <div class="variantes-title">Variantes — pour faire progresser sur l'année</div>
+      <div class="var-row var-easy"><span class="var-tag">Facile</span><span>6v3 dans une grande zone, touches de balle libres.</span></div>
+      <div class="var-row var-med"><span class="var-tag">Moyen</span><span>Zone réduite, objectif 8 passes consécutives = 1 point.</span></div>
+      <div class="var-row var-hard"><span class="var-tag">Difficile</span><span>6v4, 2 touches max, passage obligatoire par un appui intérieur.</span></div>
+    </div>
+  </div>
+
+  <div class="card" id="schema-bloc">
+    <div class="card-title">⚽ Exercice 6 — Bloc défensif qui glisse</div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 420 280" width="420" height="280" xmlns="http://www.w3.org/2000/svg">
+        <rect width="420" height="280" fill="#0d4a22" rx="8"/>
+        <rect x="15" y="15" width="390" height="250" fill="none" stroke="#ffffff33" stroke-width="1.5" rx="4"/>
+
+        <!-- but défendu en bas + surface -->
+        <rect x="160" y="263" width="100" height="6" fill="#fff"/>
+        <rect x="120" y="219" width="180" height="46" fill="none" stroke="#ffffff33" stroke-width="1"/>
+
+        <!-- ballon adverse côté droit -->
+        <circle cx="330" cy="70" r="12" fill="#1DB954" stroke="#fff" stroke-width="1.5"/><text x="330" y="74" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">P</text>
+        <circle cx="344" cy="62" r="5.5" fill="#fff" stroke="#111"/><circle cx="344" cy="62" r="1.8" fill="#111"/>
+        <circle cx="200" cy="55" r="11" fill="#1DB954" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="90" cy="75" r="11" fill="#1DB954" stroke="#fff" stroke-width="1.5"/>
+
+        <!-- ligne défensive (4) reliée -->
+        <line x1="95" y1="160" x2="325" y2="160" stroke="#2b9ddb" stroke-width="1.5" stroke-dasharray="3,4"/>
+        <circle cx="100" cy="160" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="100" y="164" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">DG</text>
+        <circle cx="175" cy="160" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="175" y="164" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">DC</text>
+        <circle cx="250" cy="160" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="250" y="164" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">DC</text>
+        <circle cx="325" cy="160" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="325" y="164" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">DD</text>
+
+        <!-- toute la ligne glisse côté ballon (droite) -->
+        <line x1="115" y1="178" x2="145" y2="178" stroke="#f0861a" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#mk-move)"/>
+        <line x1="190" y1="178" x2="220" y2="178" stroke="#f0861a" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#mk-move)"/>
+        <line x1="265" y1="178" x2="295" y2="178" stroke="#f0861a" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#mk-move)"/>
+        <line x1="338" y1="178" x2="362" y2="178" stroke="#f0861a" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#mk-move)"/>
+
+        <!-- passe adverse qui amène le ballon à droite -->
+        <line x1="210" y1="62" x2="318" y2="68" stroke="#fff" stroke-width="2.5" marker-end="url(#mk-pass)"/>
+
+        <!-- repère compacité -->
+        <line x1="380" y1="160" x2="380" y2="219" stroke="#f0c030" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="386" y="195" fill="#f0c030" font-size="9" transform="rotate(90 386 195)">max 25 m</text>
+
+        <text x="210" y="205" text-anchor="middle" fill="#f0861a" font-size="11" font-weight="bold">la ligne glisse côté ballon →</text>
+      </svg>
+      <div class="terrain-caption">Le ballon passe côté droit : les 4 défenseurs glissent ENSEMBLE vers la droite, reliés comme par une corde. On garde la ligne et la compacité (≤ 25 m du but).</div>
+    </div>
+    <ul class="exo-steps" style="margin-top:12px;">
+      <li>4 défenseurs alignés ; l'éducateur déplace le ballon de gauche à droite</li>
+      <li>Consigne : « ballon à droite = tout le monde glisse à droite, on reste alignés »</li>
+      <li>Le défenseur côté ballon monte, les autres couvrent en diagonale</li>
+      <li>Astuce : reliez-les avec une corde au début pour matérialiser le bloc</li>
+    </ul>
+    <div class="mat-chips"><span class="chip">Chasubles</span><span class="chip">1 ballon</span><span class="chip">4 défenseurs + attaquants</span></div>
+    <div class="variantes">
+      <div class="variantes-title">Variantes — pour faire progresser sur l'année</div>
+      <div class="var-row var-easy"><span class="var-tag">Facile</span><span>Ligne seule, sans adversaire : l'éducateur déplace le ballon lentement.</span></div>
+      <div class="var-row var-med"><span class="var-tag">Moyen</span><span>Ajout d'attaquants passifs, glissements à rythme réel.</span></div>
+      <div class="var-row var-hard"><span class="var-tag">Difficile</span><span>Jeu réel : sanction si un espace s'ouvre entre deux défenseurs.</span></div>
+    </div>
+  </div>
+
+  <div class="card" id="schema-contre">
+    <div class="card-title">⚽ Exercice 7 — Contre-attaque éclair (3v2)</div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 320 360" width="320" height="360" xmlns="http://www.w3.org/2000/svg">
+        <rect width="320" height="360" fill="#0d4a22" rx="8"/>
+        <rect x="15" y="15" width="290" height="330" fill="none" stroke="#ffffff33" stroke-width="1.5" rx="4"/>
+        <line x1="15" y1="180" x2="305" y2="180" stroke="#ffffff33" stroke-width="1" stroke-dasharray="8,4"/>
+        <text x="22" y="195" fill="#ffffff44" font-size="9">milieu</text>
+
+        <!-- but visé en haut + surface + gardien -->
+        <rect x="120" y="11" width="80" height="6" fill="#fff"/>
+        <rect x="95" y="15" width="130" height="40" fill="none" stroke="#ffffff33" stroke-width="1"/>
+        <circle cx="160" cy="40" r="11" fill="#f0c030" stroke="#fff" stroke-width="1.5"/><text x="160" y="44" text-anchor="middle" fill="#111" font-size="9" font-weight="bold">G</text>
+
+        <!-- récupération en bas (point de départ) -->
+        <circle cx="160" cy="300" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="160" y="304" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">A1</text>
+        <circle cx="172" cy="292" r="5.5" fill="#fff" stroke="#111"/><circle cx="172" cy="292" r="1.8" fill="#111"/>
+        <circle cx="75" cy="230" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="75" y="234" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">A2</text>
+        <circle cx="245" cy="225" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="245" y="229" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">A3</text>
+
+        <!-- 2 défenseurs qui reviennent -->
+        <circle cx="130" cy="150" r="12" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/><text x="130" y="154" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">D1</text>
+        <circle cx="200" cy="135" r="12" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/><text x="200" y="139" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">D2</text>
+
+        <!-- 1: passe A1 -> A3 (lancement rapide) -->
+        <line x1="172" y1="294" x2="238" y2="236" stroke="#fff" stroke-width="2.5" marker-end="url(#mk-pass)"/>
+        <!-- 2: conduite A3 vers l'avant -->
+        <path d="M248 212 q-8 -6 0 -14 t0 -14 t0 -14" stroke="#2b9ddb" stroke-width="2.5" fill="none" marker-end="url(#mk-run)"/>
+        <!-- 3: passe décisive A3 -> A2 (qui a démarré) -->
+        <line x1="234" y1="160" x2="120" y2="135" stroke="#fff" stroke-width="2.5" marker-end="url(#mk-pass)"/>
+        <!-- déplacement A2 dans le dos de la défense -->
+        <path d="M82 215 q10 -30 30 -55" stroke="#f0861a" stroke-width="2.5" fill="none" stroke-dasharray="5,4" marker-end="url(#mk-move)"/>
+        <!-- 4: tir -->
+        <line x1="115" y1="118" x2="150" y2="60" stroke="#f0c030" stroke-width="3.5" marker-end="url(#mk-shot)"/>
+
+        <!-- numéros -->
+        <circle cx="212" cy="262" r="9" fill="#0a3d1f" stroke="#fff" stroke-width="1.3"/><text x="212" y="266" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">1</text>
+        <circle cx="270" cy="190" r="9" fill="#0a3d1f" stroke="#2b9ddb" stroke-width="1.3"/><text x="270" y="194" text-anchor="middle" fill="#2b9ddb" font-size="11" font-weight="bold">2</text>
+        <circle cx="178" cy="138" r="9" fill="#0a3d1f" stroke="#fff" stroke-width="1.3"/><text x="178" y="142" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">3</text>
+        <circle cx="100" cy="90" r="9" fill="#0a3d1f" stroke="#f0c030" stroke-width="1.3"/><text x="100" y="94" text-anchor="middle" fill="#f0c030" font-size="11" font-weight="bold">4</text>
+      </svg>
+      <div class="terrain-caption">① A1 récupère et lance vite A3 · ② A3 conduit vers l'avant et fixe D2 · ③ passe décisive pour A2 qui a démarré dans le dos · ④ tir. Le tout en moins de 8 secondes.</div>
+    </div>
+    <ul class="exo-steps" style="margin-top:12px;">
+      <li>Dès la récupération : 8 secondes pour conclure (chrono à voix haute)</li>
+      <li>Le porteur fixe un défenseur avant de servir le joueur libre</li>
+      <li>Le joueur sans ballon démarre dans l'espace, derrière la défense</li>
+      <li>Les défenseurs : le premier ralentit, le second couvre</li>
+    </ul>
+    <div class="mat-chips"><span class="chip">Grande cage + gardien</span><span class="chip">Demi-terrain</span><span class="chip">3v2</span></div>
+    <div class="variantes">
+      <div class="variantes-title">Variantes — pour faire progresser sur l'année</div>
+      <div class="var-row var-easy"><span class="var-tag">Facile</span><span>3v1, sans contrainte de temps : on travaille la prise d'info.</span></div>
+      <div class="var-row var-med"><span class="var-tag">Moyen</span><span>3v2 avec 8 secondes pour conclure (chrono à voix haute).</span></div>
+      <div class="var-row var-hard"><span class="var-tag">Difficile</span><span>3v2 + un défenseur qui revient (3v3 final), 6 secondes chrono.</span></div>
+    </div>
+  </div>
+
+  <div class="card" id="schema-corner">
+    <div class="card-title">⚽ Exercice 8 — Corner : routine premier poteau</div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 360 300" width="360" height="300" xmlns="http://www.w3.org/2000/svg">
+        <rect width="360" height="300" fill="#0d4a22" rx="8"/>
+        <!-- ligne de but en haut, terrain dessous -->
+        <rect x="15" y="40" width="330" height="245" fill="none" stroke="#ffffff33" stroke-width="1.5" rx="4"/>
+        <!-- ligne de but -->
+        <line x1="15" y1="40" x2="345" y2="40" stroke="#ffffff55" stroke-width="2"/>
+        <!-- but -->
+        <rect x="145" y="32" width="70" height="8" fill="#fff"/>
+        <!-- 6 mètres -->
+        <rect x="120" y="40" width="120" height="35" fill="none" stroke="#ffffff44" stroke-width="1"/>
+        <!-- surface de réparation -->
+        <rect x="75" y="40" width="210" height="90" fill="none" stroke="#ffffff44" stroke-width="1"/>
+        <!-- point de penalty -->
+        <circle cx="180" cy="100" r="2.5" fill="#fff"/>
+        <!-- arc de cercle -->
+        <path d="M138 130 A 50 50 0 0 0 222 130" fill="none" stroke="#ffffff44" stroke-width="1"/>
+        <!-- arc de corner -->
+        <path d="M15 52 A 12 12 0 0 0 27 40" fill="none" stroke="#ffffff44" stroke-width="1"/>
+
+        <!-- tireur au corner -->
+        <circle cx="28" cy="55" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="28" y="59" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">T</text>
+        <circle cx="40" cy="49" r="5.5" fill="#fff" stroke="#111"/><circle cx="40" cy="49" r="1.8" fill="#111"/>
+
+        <!-- zone cible premier poteau -->
+        <ellipse cx="135" cy="62" rx="26" ry="16" fill="#f0c03022" stroke="#f0c030" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="135" y="92" text-anchor="middle" fill="#f0c030" font-size="9">zone cible</text>
+
+        <!-- attaquants -->
+        <circle cx="180" cy="160" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="180" y="164" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">A1</text>
+        <circle cx="230" cy="150" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="230" y="154" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">A2</text>
+        <circle cx="180" cy="115" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="180" y="119" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">A3</text>
+
+        <!-- 1 : centre en cloche vers le premier poteau -->
+        <path d="M44 50 Q 95 35 128 56" stroke="#fff" stroke-width="2.5" fill="none" marker-end="url(#mk-pass)"/>
+        <!-- 2 : appel A1 vers premier poteau -->
+        <line x1="172" y1="148" x2="142" y2="78" stroke="#f0861a" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#mk-move)"/>
+        <!-- 3 : A3 fixe le point de penalty puis décroche -->
+        <line x1="180" y1="103" x2="180" y2="135" stroke="#f0861a" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#mk-move)"/>
+
+        <!-- numéros -->
+        <circle cx="92" cy="36" r="9" fill="#0a3d1f" stroke="#fff" stroke-width="1.3"/><text x="92" y="40" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold">1</text>
+        <circle cx="150" cy="118" r="9" fill="#0a3d1f" stroke="#f0861a" stroke-width="1.3"/><text x="150" y="122" text-anchor="middle" fill="#f0861a" font-size="11" font-weight="bold">2</text>
+      </svg>
+      <div class="terrain-caption">① Le tireur centre vers le premier poteau (zone cible) · ② A1 s'élance vers le premier poteau pour la déviation · ③ A3 fixe le point de penalty puis décroche pour le second ballon.</div>
+    </div>
+    <ul class="exo-steps" style="margin-top:12px;">
+      <li>Centre tendu vers le premier poteau (zone cible jaune)</li>
+      <li>A1 attaque le premier poteau en mouvement pour dévier vers le but</li>
+      <li>A2 reste à l'affût au second poteau, A3 occupe le point de penalty</li>
+      <li>Répéter jusqu'à l'automatisme — 2 routines maîtrisées suffisent</li>
+    </ul>
+    <div class="mat-chips"><span class="chip">Grande cage + gardien</span><span class="chip">Surface de réparation</span><span class="chip">Phase arrêtée</span></div>
+    <div class="variantes">
+      <div class="variantes-title">Variantes — pour faire progresser sur l'année</div>
+      <div class="var-row var-easy"><span class="var-tag">Facile</span><span>Sans gardien ni défenseurs : on travaille placement et qualité de centre.</span></div>
+      <div class="var-row var-med"><span class="var-tag">Moyen</span><span>Avec gardien, les attaquants répètent la routine.</span></div>
+      <div class="var-row var-hard"><span class="var-tag">Difficile</span><span>Avec gardien + défenseurs en marquage individuel, en opposition réelle.</span></div>
+    </div>
+  </div>
+
+  <div class="card" id="schema-slalom">
+    <div class="card-title">⚽ Exercice 9 — Slalom de conduite</div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 380 210" width="380" height="210" xmlns="http://www.w3.org/2000/svg">
+        <rect width="380" height="210" fill="#0d4a22" rx="8"/>
+        <rect x="14" y="40" width="352" height="130" fill="none" stroke="#ffffff22" stroke-width="1" rx="4"/>
+
+        <!-- conduite en slalom (ondulé) -->
+        <path d="M55 105 q20 -30 40 0 t40 0 t40 0 t40 0 t40 0 t40 0" stroke="#2b9ddb" stroke-width="2.5" fill="none" marker-end="url(#mk-run)"/>
+        <!-- retour sprint sans ballon (bas) -->
+        <line x1="320" y1="150" x2="55" y2="150" stroke="#f0861a" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#mk-move)"/>
+
+        <!-- plots sur la ligne centrale -->
+        <polygon points="95,99 101,111 89,111" fill="#f0c030"/>
+        <polygon points="135,99 141,111 129,111" fill="#f0c030"/>
+        <polygon points="175,99 181,111 169,111" fill="#f0c030"/>
+        <polygon points="215,99 221,111 209,111" fill="#f0c030"/>
+        <polygon points="255,99 261,111 249,111" fill="#f0c030"/>
+        <polygon points="295,99 301,111 289,111" fill="#f0c030"/>
+
+        <!-- joueur + ballon au départ -->
+        <circle cx="42" cy="105" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="42" y="109" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">J</text>
+        <circle cx="54" cy="113" r="5.5" fill="#fff" stroke="#111"/><circle cx="54" cy="113" r="1.8" fill="#111"/>
+
+        <text x="190" y="28" text-anchor="middle" fill="#2b9ddb" font-size="11" font-weight="bold">aller : conduite en slalom</text>
+        <text x="190" y="190" text-anchor="middle" fill="#f0861a" font-size="11" font-weight="bold">retour : sprint sans ballon</text>
+      </svg>
+      <div class="terrain-caption">Conduite de balle en zigzag entre les plots (pied droit / pied gauche en alternance), puis retour en sprint sans ballon par le côté.</div>
+    </div>
+    <ul class="exo-steps" style="margin-top:12px;">
+      <li>6 à 8 plots espacés de ~1 m sur une ligne droite</li>
+      <li>Conduite en touchant le ballon des deux pieds, tête relevée le plus possible</li>
+      <li>Retour en sprint sans ballon pour enchaîner</li>
+      <li>Variante chrono : qui fait le parcours le plus propre, pas le plus vite</li>
+    </ul>
+    <div class="mat-chips"><span class="chip">6-8 plots</span><span class="chip">1 ballon / joueur</span><span class="chip">Atelier</span></div>
+    <div class="variantes">
+      <div class="variantes-title">Variantes — pour faire progresser sur l'année</div>
+      <div class="var-row var-easy"><span class="var-tag">Facile</span><span>Plots espacés (1,5 m), allure modérée, pied fort uniquement.</span></div>
+      <div class="var-row var-med"><span class="var-tag">Moyen</span><span>Plots resserrés (1 m), conduite des deux pieds.</span></div>
+      <div class="var-row var-hard"><span class="var-tag">Difficile</span><span>Plots serrés (70 cm) + tête haute : annoncer le nombre de doigts montrés par l'éduc.</span></div>
+    </div>
+  </div>
+
+  <div class="card" id="schema-1v1">
+    <div class="card-title">⚽ Exercice 10 — Dribble 1v1 en couloir</div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 240 320" width="240" height="320" xmlns="http://www.w3.org/2000/svg">
+        <rect width="240" height="320" fill="#0d4a22" rx="8"/>
+        <!-- couloir étroit -->
+        <rect x="80" y="30" width="80" height="260" fill="#0a3d1f" stroke="#ffffff44" stroke-width="1.5"/>
+        <text x="120" y="22" text-anchor="middle" fill="#ffffff66" font-size="10">couloir ≈ 2 m</text>
+        <!-- ligne à franchir (haut) -->
+        <line x1="80" y1="45" x2="160" y2="45" stroke="#1DB954" stroke-width="3"/>
+        <text x="120" y="60" text-anchor="middle" fill="#1DB954" font-size="9">ligne à franchir</text>
+
+        <!-- défenseur au milieu -->
+        <circle cx="120" cy="160" r="12" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/><text x="120" y="164" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">D</text>
+        <!-- déplacement latéral autorisé du défenseur -->
+        <line x1="100" y1="178" x2="140" y2="178" stroke="#e03a3a88" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <line x1="98" y1="178" x2="92" y2="178" stroke="#e03a3a" stroke-width="2" marker-end="url(#mk-red)"/>
+        <line x1="142" y1="178" x2="148" y2="178" stroke="#e03a3a" stroke-width="2" marker-end="url(#mk-red)"/>
+
+        <!-- attaquant en bas + ballon -->
+        <circle cx="120" cy="255" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="120" y="259" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">A</text>
+        <circle cx="132" cy="247" r="5.5" fill="#fff" stroke="#111"/><circle cx="132" cy="247" r="1.8" fill="#111"/>
+
+        <!-- conduite avec crochet pour éliminer (ondulé qui contourne) -->
+        <path d="M122 242 q4 -22 -14 -38 q-10 -10 6 -22 q14 -10 4 -30 q-4 -12 0 -28" stroke="#2b9ddb" stroke-width="2.5" fill="none" marker-end="url(#mk-run)"/>
+
+        <!-- numéros -->
+        <circle cx="92" cy="205" r="9" fill="#0a3d1f" stroke="#2b9ddb" stroke-width="1.3"/><text x="92" y="209" text-anchor="middle" fill="#2b9ddb" font-size="11" font-weight="bold">1</text>
+        <circle cx="138" cy="120" r="9" fill="#0a3d1f" stroke="#2b9ddb" stroke-width="1.3"/><text x="138" y="124" text-anchor="middle" fill="#2b9ddb" font-size="11" font-weight="bold">2</text>
+      </svg>
+      <div class="terrain-caption">L'attaquant conduit, ① provoque le défenseur (qui ne se déplace que latéralement au début), ② l'élimine d'un crochet et franchit la ligne. Défenseur libre après 10 min.</div>
+    </div>
+    <ul class="exo-steps" style="margin-top:12px;">
+      <li>Couloir étroit (~2 m) : l'attaquant doit franchir la ligne du haut, balle au pied</li>
+      <li>Phase 1 : défenseur passif (déplacement latéral seulement)</li>
+      <li>Phase 2 : défenseur semi-actif, puis totalement libre</li>
+      <li>Gestes à travailler : crochet intérieur et passement de jambe</li>
+    </ul>
+    <div class="mat-chips"><span class="chip">4 plots / couloir</span><span class="chip">1 ballon</span><span class="chip">1v1</span></div>
+    <div class="variantes">
+      <div class="variantes-title">Variantes — pour faire progresser sur l'année</div>
+      <div class="var-row var-easy"><span class="var-tag">Facile</span><span>Défenseur passif (latéral seulement), couloir large.</span></div>
+      <div class="var-row var-med"><span class="var-tag">Moyen</span><span>Défenseur semi-actif, couloir standard.</span></div>
+      <div class="var-row var-hard"><span class="var-tag">Difficile</span><span>Défenseur libre, couloir étroit, 1v1 réel avec finition au but.</span></div>
+    </div>
+  </div>
+
+  <div class="card" id="schema-portes">
+    <div class="card-title">⚽ Exercice 11 — Jeu des portes 4v4</div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 380 280" width="380" height="280" xmlns="http://www.w3.org/2000/svg">
+        <rect width="380" height="280" fill="#0d4a22" rx="8"/>
+        <rect x="20" y="20" width="340" height="240" fill="none" stroke="#ffffff44" stroke-width="1.5" rx="4"/>
+        <text x="190" y="14" text-anchor="middle" fill="#ffffff66" font-size="10">zone 25 × 20 m</text>
+
+        <!-- 4 portes (paires de plots) -->
+        <polygon points="110,80 116,92 104,92" fill="#f0c030"/><polygon points="150,80 156,92 144,92" fill="#f0c030"/>
+        <line x1="116" y1="86" x2="144" y2="86" stroke="#f0c03066" stroke-width="1" stroke-dasharray="2,2"/>
+        <polygon points="250,70 256,82 244,82" fill="#f0c030"/><polygon points="290,70 296,82 284,82" fill="#f0c030"/>
+        <line x1="256" y1="76" x2="284" y2="76" stroke="#f0c03066" stroke-width="1" stroke-dasharray="2,2"/>
+        <polygon points="90,190 96,202 84,202" fill="#f0c030"/><polygon points="130,190 136,202 124,202" fill="#f0c030"/>
+        <line x1="96" y1="196" x2="124" y2="196" stroke="#f0c03066" stroke-width="1" stroke-dasharray="2,2"/>
+        <polygon points="240,195 246,207 234,207" fill="#f0c030"/><polygon points="280,195 286,207 274,207" fill="#f0c030"/>
+        <line x1="246" y1="201" x2="274" y2="201" stroke="#f0c03066" stroke-width="1" stroke-dasharray="2,2"/>
+
+        <!-- passe à travers une porte -->
+        <line x1="175" y1="150" x2="128" y2="92" stroke="#fff" stroke-width="2.5" marker-end="url(#mk-pass)"/>
+        <!-- conduite vers une autre porte -->
+        <path d="M205 165 q18 8 30 28" stroke="#2b9ddb" stroke-width="2.5" fill="none" marker-end="url(#mk-run)"/>
+
+        <!-- équipe bleue -->
+        <circle cx="165" cy="160" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="200" cy="160" r="11" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="110" cy="140" r="11" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="260" cy="140" r="11" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/>
+        <!-- équipe rouge -->
+        <circle cx="150" cy="120" r="11" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="220" cy="130" r="11" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="185" cy="210" r="11" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="300" cy="160" r="11" fill="#e03a3a" stroke="#fff" stroke-width="1.5"/>
+
+        <!-- ballon -->
+        <circle cx="177" cy="150" r="5.5" fill="#fff" stroke="#111"/><circle cx="177" cy="150" r="1.8" fill="#111"/>
+      </svg>
+      <div class="terrain-caption">4 portes dispersées (paires de plots). 1 point = faire passer le ballon à un coéquipier à travers une porte, ou la franchir en conduite. Oblige à chercher les espaces.</div>
+    </div>
+    <ul class="exo-steps" style="margin-top:12px;">
+      <li>Terrain 25×20 m, 4 portes (2 plots espacés de ~1,5 m) réparties</li>
+      <li>Marquer = passer le ballon à un partenaire à travers une porte</li>
+      <li>Pas de cage = le jeu se concentre sur la conduite et la passe dans l'espace</li>
+      <li>Variante : on ne peut pas marquer 2 fois de suite dans la même porte</li>
+    </ul>
+    <div class="mat-chips"><span class="chip">8 plots</span><span class="chip">1 ballon</span><span class="chip">4v4</span></div>
+    <div class="variantes">
+      <div class="variantes-title">Variantes — pour faire progresser sur l'année</div>
+      <div class="var-row var-easy"><span class="var-tag">Facile</span><span>6 portes larges, jeu libre, beaucoup d'espaces.</span></div>
+      <div class="var-row var-med"><span class="var-tag">Moyen</span><span>4 portes, passe à travers la porte obligatoire pour marquer.</span></div>
+      <div class="var-row var-hard"><span class="var-tag">Difficile</span><span>4 portes, 3 touches max, interdiction de remarquer dans la même porte.</span></div>
+    </div>
+  </div>
+
+  <div class="card" id="schema-finition">
+    <div class="card-title">⚽ Exercice 12 — Circuit de finition (4 ateliers)</div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 380 290" width="380" height="290" xmlns="http://www.w3.org/2000/svg">
+        <rect width="380" height="290" fill="#0d4a22" rx="8"/>
+        <!-- but + surface en haut -->
+        <rect x="150" y="14" width="80" height="8" fill="#fff"/>
+        <rect x="120" y="22" width="140" height="38" fill="none" stroke="#ffffff44" stroke-width="1"/>
+        <rect x="70" y="22" width="240" height="95" fill="none" stroke="#ffffff33" stroke-width="1"/>
+        <circle cx="190" cy="40" r="11" fill="#f0c030" stroke="#fff" stroke-width="1.5"/><text x="190" y="44" text-anchor="middle" fill="#111" font-size="9" font-weight="bold">G</text>
+
+        <!-- atelier 1 : tir en course depuis 15m (gauche) -->
+        <circle cx="70" cy="200" r="11" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="70" y="204" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold">1</text>
+        <path d="M78 192 q6 -14 18 -24" stroke="#2b9ddb" stroke-width="2.5" fill="none" marker-end="url(#mk-run)"/>
+        <line x1="100" y1="160" x2="160" y2="62" stroke="#f0c030" stroke-width="3.5" marker-end="url(#mk-shot)"/>
+
+        <!-- atelier 2 : tir après contrôle (centre-gauche) -->
+        <circle cx="150" cy="230" r="11" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="150" y="234" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold">2</text>
+        <line x1="158" y1="218" x2="175" y2="70" stroke="#f0c030" stroke-width="3.5" marker-end="url(#mk-shot)"/>
+
+        <!-- atelier 3 : tir en une touche sur centre (droite) -->
+        <circle cx="310" cy="160" r="11" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="310" y="164" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold">3</text>
+        <circle cx="250" cy="200" r="11" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/>
+        <line x1="298" y1="165" x2="262" y2="195" stroke="#fff" stroke-width="2.5" marker-end="url(#mk-pass)"/>
+        <line x1="245" y1="188" x2="210" y2="66" stroke="#f0c030" stroke-width="3.5" marker-end="url(#mk-shot)"/>
+
+        <!-- atelier 4 : face au but feinte puis tir (centre) -->
+        <circle cx="210" cy="245" r="11" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="210" y="249" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold">4</text>
+        <line x1="210" y1="234" x2="200" y2="74" stroke="#f0c030" stroke-width="3.5" marker-end="url(#mk-shot)"/>
+
+        <text x="60" y="265" fill="#ffffff88" font-size="9">① course  ② contrôle  ③ une touche  ④ feinte</text>
+      </svg>
+      <div class="terrain-caption">4 ateliers de tir autour du but : ① tir en course depuis 15 m · ② tir après contrôle orienté · ③ tir en une touche sur centre · ④ face au but, feinte puis tir. Rotation toutes les 4 min.</div>
+    </div>
+    <ul class="exo-steps" style="margin-top:12px;">
+      <li>Installe 4 postes autour de la surface, un stock de ballons à chacun</li>
+      <li>Les joueurs tournent sur les 4 ateliers toutes les 4 min</li>
+      <li>Travaille les deux pieds — impose le pied faible sur un atelier</li>
+      <li>Le gardien participe : c'est aussi son entraînement</li>
+    </ul>
+    <div class="mat-chips"><span class="chip">Grande cage + gardien</span><span class="chip">Ballons en nombre</span><span class="chip">4 plots repères</span></div>
+    <div class="variantes">
+      <div class="variantes-title">Variantes — pour faire progresser sur l'année</div>
+      <div class="var-row var-easy"><span class="var-tag">Facile</span><span>Ballon arrêté, sans gardien : on travaille le geste de frappe.</span></div>
+      <div class="var-row var-med"><span class="var-tag">Moyen</span><span>Ballon en mouvement, avec gardien.</span></div>
+      <div class="var-row var-hard"><span class="var-tag">Difficile</span><span>Sous pression d'un défenseur + temps limité pour déclencher.</span></div>
+    </div>
+  </div>
+
+  <div class="card" id="schema-echelle">
+    <div class="card-title">⚽ Exercice 13 — Échelle d'agilité (coordination)</div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 380 200" width="380" height="200" xmlns="http://www.w3.org/2000/svg">
+        <rect width="380" height="200" fill="#0d4a22" rx="8"/>
+        <!-- échelle : 2 rails + barreaux -->
+        <line x1="40" y1="80" x2="300" y2="80" stroke="#f0c030" stroke-width="2"/>
+        <line x1="40" y1="120" x2="300" y2="120" stroke="#f0c030" stroke-width="2"/>
+        <line x1="70" y1="80" x2="70" y2="120" stroke="#f0c030" stroke-width="2"/>
+        <line x1="100" y1="80" x2="100" y2="120" stroke="#f0c030" stroke-width="2"/>
+        <line x1="130" y1="80" x2="130" y2="120" stroke="#f0c030" stroke-width="2"/>
+        <line x1="160" y1="80" x2="160" y2="120" stroke="#f0c030" stroke-width="2"/>
+        <line x1="190" y1="80" x2="190" y2="120" stroke="#f0c030" stroke-width="2"/>
+        <line x1="220" y1="80" x2="220" y2="120" stroke="#f0c030" stroke-width="2"/>
+        <line x1="250" y1="80" x2="250" y2="120" stroke="#f0c030" stroke-width="2"/>
+        <line x1="280" y1="80" x2="280" y2="120" stroke="#f0c030" stroke-width="2"/>
+
+        <!-- appuis des pieds (1 appui par case) -->
+        <ellipse cx="55" cy="100" rx="6" ry="9" fill="#2b9ddb"/>
+        <ellipse cx="85" cy="100" rx="6" ry="9" fill="#2b9ddb"/>
+        <ellipse cx="115" cy="100" rx="6" ry="9" fill="#2b9ddb"/>
+        <ellipse cx="145" cy="100" rx="6" ry="9" fill="#2b9ddb"/>
+        <ellipse cx="175" cy="100" rx="6" ry="9" fill="#2b9ddb"/>
+        <ellipse cx="205" cy="100" rx="6" ry="9" fill="#2b9ddb"/>
+        <ellipse cx="235" cy="100" rx="6" ry="9" fill="#2b9ddb"/>
+        <ellipse cx="265" cy="100" rx="6" ry="9" fill="#2b9ddb"/>
+
+        <!-- joueur au départ -->
+        <circle cx="25" cy="100" r="12" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/><text x="25" y="104" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">J</text>
+        <!-- sprint de sortie -->
+        <line x1="305" y1="100" x2="355" y2="100" stroke="#f0861a" stroke-width="2.5" marker-end="url(#mk-move)"/>
+        <text x="330" y="92" text-anchor="middle" fill="#f0861a" font-size="9">sprint 10 m</text>
+
+        <text x="170" y="155" text-anchor="middle" fill="#ffffff88" font-size="10">1 appui par case → puis 2 appuis → puis pas chassés latéraux</text>
+      </svg>
+      <div class="terrain-caption">Échelle simulée avec des plots (cases de ~50 cm). Variantes : un appui par case, deux appuis, pas chassés latéraux. On termine toujours par une accélération de 10 m.</div>
+    </div>
+    <ul class="exo-steps" style="margin-top:12px;">
+      <li>8 plots espacés de 50 cm forment les cases de l'échelle</li>
+      <li>Travail de fréquence d'appuis : pieds rapides, regard devant</li>
+      <li>Toujours finir par un sprint pour relier coordination et vitesse</li>
+      <li>Qualité avant quantité : 3 passages propres par variante</li>
+    </ul>
+    <div class="mat-chips"><span class="chip">8 plots</span><span class="chip">Sans ballon</span><span class="chip">Échauffement / physique</span></div>
+    <div class="variantes">
+      <div class="variantes-title">Variantes — pour faire progresser sur l'année</div>
+      <div class="var-row var-easy"><span class="var-tag">Facile</span><span>1 appui par case, allure lente, focus sur la propreté.</span></div>
+      <div class="var-row var-med"><span class="var-tag">Moyen</span><span>2 appuis par case, rythme plus rapide.</span></div>
+      <div class="var-row var-hard"><span class="var-tag">Difficile</span><span>Pas chassés latéraux + sprint de sortie enchaîné avec une conduite de balle.</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════ PAGE 4 : OBJECTIFS -->
+<div class="page" id="page-objectifs">
+
+  <div class="section-title">Objectifs de la saison</div>
+
+  <div class="obj-grid">
+    <div class="obj-card">
+      <h4 style="color:var(--bleu)">🔵 Technique</h4>
+      <ul>
+        <li>Passe précise intérieure du pied</li>
+        <li>Contrôle et orientation du ballon</li>
+        <li>Conduite en espace libre</li>
+        <li>1v1 offensif (tenter le dribble)</li>
+        <li>Tir avec les deux pieds (initiation)</li>
+        <li>Jeu de tête de base (initiation)</li>
+      </ul>
+    </div>
+    <div class="obj-card">
+      <h4 style="color:var(--violet)">🟣 Tactique</h4>
+      <ul>
+        <li>Occuper les couloirs du terrain</li>
+        <li>Demander le ballon vocalement</li>
+        <li>Bloc équipe défensif (ligne)</li>
+        <li>Transition attaque → défense</li>
+        <li>Lire les espaces libres</li>
+        <li>Bases du pressing haut</li>
+      </ul>
+    </div>
+    <div class="obj-card">
+      <h4 style="color:var(--orange)">🟠 Physique</h4>
+      <ul>
+        <li>Endurance de base (40 min effort)</li>
+        <li>Vitesse de démarrage</li>
+        <li>Coordination / agilité</li>
+        <li>Gainage de base</li>
+        <li>Souplesse & prévention</li>
+      </ul>
+    </div>
+    <div class="obj-card">
+      <h4 style="color:var(--vert)">🟢 Comportemental</h4>
+      <ul>
+        <li>Encourager les coéquipiers</li>
+        <li>Accepter les erreurs (siennes & autres)</li>
+        <li>Respecter l'arbitre et l'adversaire</li>
+        <li>S'échauffer sérieusement</li>
+        <li>Communiquer sur le terrain</li>
+        <li>Progresser à son rythme</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Progression par phase</div>
+
+  <div class="card">
+    <div class="prog-phase"><div class="prog-dot"></div><div class="prog-line"><strong>Phase 1 (fin août · 3 semaines)</strong> : Reprise express — cohésion, observation des niveaux, bases techniques, premiers repères du grand terrain. La condition vient du jeu, pas de footings.</div></div>
+    <div class="prog-phase"><div class="prog-dot"></div><div class="prog-line"><strong>Phase 2 (Sep–Déc)</strong> : Technique individuelle. Premiers automatismes. Introduction progressivement du foot à 11.</div></div>
+    <div class="prog-phase"><div class="prog-dot"></div><div class="prog-line"><strong>Phase 3 (Janvier)</strong> : Consolidation. Travailler sur les points faibles collectifs identifiés.</div></div>
+    <div class="prog-phase"><div class="prog-dot"></div><div class="prog-line"><strong>Phase 4 (Fév–Avr)</strong> : Jeu collectif plus organisé, transitions, pressing. Séances plus intenses.</div></div>
+    <div class="prog-phase"><div class="prog-dot"></div><div class="prog-line"><strong>Phase 5 (Mai–Juin)</strong> : Valorisation des progrès. Tournois. Bilan individuel positif. Projection saison suivante.</div></div>
+  </div>
+
+  <div class="section-title">Évaluation fin de saison</div>
+  <div class="card">
+    <p style="font-size:13px; color:#c0d0c4; margin-bottom:14px;">Grille indicative — pas de notation, juste un outil de dialogue avec le joueur et les parents.</p>
+    <div id="eval-grid">
+      <!-- généré en JS -->
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════ PAGE 5 : CONSEILS ÉDUC -->
+<div class="page" id="page-conseils">
+
+  <div class="section-title">Conseils pratiques pour l'éducateur</div>
+
+  <div class="card">
+    <div class="card-title">🎯 Gérer les niveaux mixtes dans un même groupe</div>
+    <ul class="exo-steps">
+      <li>Ne jamais exposer un débutant à l'échec en 1v1 face à un fort — mélange les binômes</li>
+      <li>Crée des rôles valorisants pour les débutants (le "fixateur" en rondo, le joueur-joker en jeu réduit)</li>
+      <li>Les exercices à contraintes (rondo, jeu de couloirs) nivellent naturellement les niveaux</li>
+      <li>Lors du match final, mélange toujours les équipes — pas les forts vs les faibles</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗣️ La communication avec les joueurs U15</div>
+    <ul class="exo-steps">
+      <li>Évite les monologues : max 2 minutes d'explications avant de faire jouer</li>
+      <li>Règle des 3 positifs : avant chaque critique, dis 3 choses bien</li>
+      <li>Pose des questions plutôt qu'imposer : "Pourquoi tu penses qu'on a perdu ce ballon ?"</li>
+      <li>À cet âge, l'humour est une arme — ris avec eux, jamais d'eux</li>
+      <li>Fin de séance en cercle avec une question PRÉCISE liée au thème du jour — pas « qu'est-ce que vous avez aimé ? » mais « cite un espace que tu as trouvé », « cite une passe dont tu es fier ». La précision ancre l'apprentissage.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏃 Adapter quand l'effectif varie (12 ou 18 joueurs ce soir)</div>
+    <ul class="exo-steps">
+      <li>En dessous de 12 : réduit les zones de jeu, joue avec des jokers neutres</li>
+      <li>Au-dessus de 16 : utilise 2 terrains réduits en parallèle pour + de touches de balle</li>
+      <li>Joueur blessé ou dispensé → arbitre ou observateur avec une tâche précise ("compte les passes réussies de ton équipe")</li>
+      <li>Exercice en nombre impair : crée un joueur-joker qui joue avec les deux équipes en jeu réduit</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">❄️ Séances hivernales (Novembre – Février)</div>
+    <ul class="exo-steps">
+      <li>Échauffement plus long : 20 min au lieu de 15 min quand il fait froid</li>
+      <li>Raccourcis la partie statique — garde les joueurs en mouvement constant</li>
+      <li>Terrain détrempé = moins d'exercices techniques fins, plus de jeu global</li>
+      <li>Si terrain impraticable : séance salle possible — rondo dans le gymnase, 1v1, gainage ludique</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 Préparation rapide d'une séance (moins de 10 min)</div>
+    <ul class="exo-steps">
+      <li>Choisis UN objectif technique ou tactique pour la séance — pas deux</li>
+      <li>Structure toujours la même : Échauffement → Exercice ciblé → Jeu réduit → Match</li>
+      <li>Prépare 1 exercice de secours simple (le rondo marche toujours)</li>
+      <li>Installe les plots AVANT l'arrivée des joueurs — ça donne le ton</li>
+      <li>Note 2 lignes après chaque séance : ce qui a marché / ce qui n'a pas marché</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🆕 Le passage du foot à 8 au foot à 11 — tes atouts</div>
+    <ul class="exo-steps">
+      <li>Ton expérience à 8 est précieuse : la logique de jeu (passes, espaces, 1v1) est la même</li>
+      <li>Principale nouveauté : la largeur. Enseigne les couloirs (exercice schéma 3) dès octobre</li>
+      <li>Les postes arrière (latéraux) sont nouveaux — introduis-les progressivement en octobre/novembre</li>
+      <li>Ne pas vouloir trop de système tactique dès le départ — laisse le jeu naturel s'installer</li>
+      <li>Ton honnêteté avec les joueurs est une force : "Je découvre aussi le foot à 11 avec vous"</li>
+    </ul>
+    <div class="tip"><strong>🎮 Analogie jeu vidéo</strong>C'est comme passer d'un jeu à difficulté "Normal" à "Hard" — les mécaniques de base restent les mêmes, le terrain de jeu s'agrandit juste. Tes joueurs connaissent déjà les contrôles !</div>
+  </div>
+
+  <div class="section-title">Matériel — Ce que tu peux faire avec ce que tu as</div>
+  <div class="card">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+      <div>
+        <div style="color:var(--vert); font-weight:700; margin-bottom:6px;">🟡 Plots / cônes</div>
+        <ul class="exo-steps" style="font-size:13px;">
+          <li>Délimiter les couloirs du terrain</li>
+          <li>Slalom de conduite</li>
+          <li>Marquer les zones de pressing</li>
+          <li>Remplacer les petits buts (2 plots = but)</li>
+        </ul>
+      </div>
+      <div>
+        <div style="color:var(--vert); font-weight:700; margin-bottom:6px;">🦺 Chasubles</div>
+        <ul class="exo-steps" style="font-size:13px;">
+          <li>Distinguer les équipes (4 couleurs si possible)</li>
+          <li>Marquer le joueur-joker (chasuble différente)</li>
+          <li>Posés au sol = délimitateurs de zone</li>
+        </ul>
+      </div>
+      <div>
+        <div style="color:var(--vert); font-weight:700; margin-bottom:6px;">⚽ Ballons</div>
+        <ul class="exo-steps" style="font-size:13px;">
+          <li>Idéal : 1 ballon pour 2 joueurs</li>
+          <li>Jonglage individuel en début de séance</li>
+          <li>Circuit de finition avec stocks de ballons</li>
+        </ul>
+      </div>
+      <div>
+        <div style="color:var(--vert); font-weight:700; margin-bottom:6px;">🥅 Petits buts</div>
+        <ul class="exo-steps" style="font-size:13px;">
+          <li>4 petits buts = 2 terrains de jeu réduit en parallèle</li>
+          <li>Tournois en simultané (2 matchs en même temps)</li>
+          <li>Atelier finition sans gardien</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════ PAGE : GARDIEN -->
+<div class="page" id="page-gardien">
+
+  <div class="section-title">Le principe — progresser sans coach de gardiens</div>
+
+  <div class="card">
+    <div class="card-title">🧤 4 règles simples pour intégrer ton gardien</div>
+    <ul class="exo-steps">
+      <li><strong>Échauffement : TOUJOURS avec le groupe.</strong> Il court, il jongle, il fait les navettes comme les autres — un gardien est d'abord un footballeur.</li>
+      <li><strong>Pendant 1-2 blocs sans buts (technique, conservation) : travail spécifique.</strong> 10-15 min avec un « serveur » — un joueur qui tourne à chaque séance et lui envoie des ballons.</li>
+      <li><strong>Dès qu'il y a des buts (finition, jeux réduits avec cages, match) : il rejoint le groupe.</strong> Chaque frappe adverse est SON entraînement — ne le prive jamais de ces blocs.</li>
+      <li><strong>Rondos et conservation : il participe comme joueur de champ.</strong> Le jeu au pied du gardien moderne se construit là, gratuitement.</li>
+    </ul>
+    <div class="tip"><strong>💡 Le serveur tournant</strong>Désigne un joueur différent à chaque séance pour servir les ballons au gardien. Ça valorise les remplaçants, ça ne pénalise personne (10 min max), et ton gardien a un vrai partenaire de travail sans que tu quittes le groupe.</div>
+  </div>
+
+  <div class="section-title">Quand faire du spécifique ? Séance par séance</div>
+
+  <div class="card" style="padding:12px;">
+    <table class="gk-table">
+      <thead><tr><th>Séance</th><th class="gk-avec">✅ Avec le groupe</th><th class="gk-spe">🧤 Son moment spécifique</th></tr></thead>
+      <tbody>
+        <tr><td>ST1 · MAR<br>Reprise</td><td class="gk-avec">Échauffement · 3v3 (comme joueur) · match dans le but</td><td class="gk-spe">Pendant le Passe &amp; va : gammes de prises de balle (G1)</td></tr>
+        <tr><td>ST1 · VEN<br>Conduite &amp; dribble</td><td class="gk-avec">Échauffement slalom (excellent pour ses appuis) · match dans le but</td><td class="gk-spe">Pendant le 1v1 et les portes : appuis &amp; déplacements (G2)</td></tr>
+        <tr><td>ST2 · MAR<br>Jeu à 11</td><td class="gk-avec">Rondo (comme joueur) · match 9v9 dans le but</td><td class="gk-spe">Pendant le jeu des couloirs : jeu au pied &amp; relances (G4)</td></tr>
+        <tr class="gk-or"><td>ST2 · VEN<br>Finition</td><td class="gk-avec">TOUTE LA SÉANCE — c'est sa séance en or : arrêts en continu sur les 4 ateliers, le 2v1 et le match</td><td class="gk-spe">Aucun — il est indispensable au groupe</td></tr>
+        <tr><td>ST3 · MAR<br>Conservation</td><td class="gk-avec">Rondo et 6v3 comme joueur de champ (jeu au pied) · match</td><td class="gk-spe">Pendant le triangle mobile : plongeons par paliers (G3)</td></tr>
+        <tr><td>ST3 · VEN<br>Défense collective</td><td class="gk-avec">Échauffement · il COMMANDE la ligne à la voix pendant le rideau · match</td><td class="gk-spe">Pendant la mise en place du rideau (sans attaquants) : prises de balle (G1)</td></tr>
+        <tr><td>ST4 · MAR<br>Transitions</td><td class="gk-avec">Échauffement réaction (parfait pour lui) · 3v2 avec gardien · match — quasi toute la séance</td><td class="gk-spe">Option 10 min avant le 3v2 : sorties aériennes (G5)</td></tr>
+        <tr><td>ST4 · VEN<br>Tête &amp; duels</td><td class="gk-avec">Duel corps à corps · match dans le but</td><td class="gk-spe">Pendant les paliers de tête : sorties aériennes (G5) — même thème, version gardien</td></tr>
+        <tr class="gk-or"><td>ST5 · MAR<br>Vitesse &amp; coordination</td><td class="gk-avec">TOUTE LA SÉANCE — l'échelle d'agilité et les circuits sont de l'or pur pour un gardien</td><td class="gk-spe">Option : il finit chaque circuit par un arrêt au lieu d'une frappe</td></tr>
+        <tr class="gk-or"><td>ST5 · VEN<br>Phases arrêtées</td><td class="gk-avec">TOUTE LA SÉANCE — les corners sont son meilleur entraînement de sorties aériennes en situation réelle</td><td class="gk-spe">Aucun — il est au cœur de la séance</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px; color:var(--gris); margin-top:8px;">Bilan : sur une semaine type, ton gardien fait 1 à 2 blocs spécifiques de 10-15 min, et le reste avec le groupe. C'est exactement le bon dosage en amateur — assez pour progresser au poste, pas assez pour l'isoler du collectif.</p>
+  </div>
+
+  <div class="section-title">Banque d'exercices spécifiques — 10-15 min avec 1 serveur</div>
+
+  <div class="card" id="gk-g1">
+    <div class="card-title">G1 — Gammes de prises de balle</div>
+    <div class="exo-block tech">
+      <div class="exo-label tech">⏱ 10 min · Base fondamentale</div>
+      <ul class="exo-steps">
+        <li>Serveur à 5-8 m · 3 types de ballons : roulé au sol (prise en cuillère), mi-hauteur (mains en W, pouces qui se touchent), au-dessus de la tête</li>
+        <li>10 ballons par type, vitesse en augmentation progressive</li>
+        <li>Consigne d'or : <strong>toujours le corps derrière le ballon</strong> — les mains ne sont que la dernière barrière</li>
+        <li>Variante : le serveur annonce « sol ! » ou « haut ! » au dernier moment</li>
+      </ul>
+      <div class="tip"><strong>💡 Astuce éduc</strong>C'est l'exercice à répéter le plus souvent. 80% des buts encaissés en amateur viennent d'une prise de balle ratée, pas d'un manque de détente.</div>
+    </div>
+    <div class="mat-chips"><span class="chip">6 ballons</span><span class="chip">1 serveur</span><span class="chip">Devant le but ou contre un mur</span></div>
+  </div>
+
+  <div class="card" id="gk-g2">
+    <div class="card-title">G2 — Appuis & déplacements</div>
+    <div class="exo-block phys">
+      <div class="exo-label phys">⏱ 10 min · Jeu de jambes</div>
+      <ul class="exo-steps">
+        <li>3 plots en arc de cercle devant le but (poteau gauche, centre, poteau droit)</li>
+        <li>Pas chassés de plot en plot — <strong>jamais croiser les jambes</strong>, toujours face au jeu</li>
+        <li>Au signal du serveur : frappe faible que le gardien doit arrêter après son déplacement</li>
+        <li>Variante : le serveur annonce un plot, le gardien le touche puis se replace au centre avant la frappe</li>
+      </ul>
+    </div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 360 200" width="360" height="200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="gk-move" markerWidth="9" markerHeight="7" refX="7" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#f0861a"/></marker>
+          <marker id="gk-shot" markerWidth="11" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0 0,11 4.5,0 9" fill="#f0c030"/></marker>
+        </defs>
+        <rect width="360" height="200" fill="#0a3d1f" rx="8"/>
+        <!-- but -->
+        <rect x="105" y="12" width="150" height="8" fill="#fff"/>
+        <line x1="105" y1="20" x2="105" y2="60" stroke="#fff" stroke-width="3"/>
+        <line x1="255" y1="20" x2="255" y2="60" stroke="#fff" stroke-width="3"/>
+        <!-- plots en arc -->
+        <polygon points="120,80 127,94 113,94" fill="#f0c030"/>
+        <polygon points="180,95 187,109 173,109" fill="#f0c030"/>
+        <polygon points="240,80 247,94 233,94" fill="#f0c030"/>
+        <!-- gardien au centre -->
+        <circle cx="180" cy="65" r="13" fill="#f0861a" stroke="#fff" stroke-width="1.5"/>
+        <text x="180" y="69" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">G</text>
+        <!-- déplacements pas chassés -->
+        <path d="M165 72 Q 140 78 126 92" stroke="#f0861a" stroke-width="2.5" fill="none" stroke-dasharray="5,4" marker-end="url(#gk-move)"/>
+        <path d="M195 72 Q 220 78 234 92" stroke="#f0861a" stroke-width="2.5" fill="none" stroke-dasharray="5,4" marker-end="url(#gk-move)"/>
+        <!-- serveur + frappe -->
+        <circle cx="180" cy="165" r="13" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/>
+        <text x="180" y="169" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">S</text>
+        <circle cx="194" cy="158" r="5.5" fill="#fff" stroke="#111"/><circle cx="194" cy="158" r="1.8" fill="#111"/>
+        <line x1="192" y1="152" x2="150" y2="90" stroke="#f0c030" stroke-width="3" marker-end="url(#gk-shot)"/>
+        <text x="285" y="130" fill="#ffffff66" font-size="10">pas chassés,</text>
+        <text x="285" y="143" fill="#ffffff66" font-size="10">jamais croisés</text>
+      </svg>
+      <div class="terrain-caption">Le gardien (G) se déplace en pas chassés entre les plots, le serveur (S) frappe faible au signal. Déplacement → replacement → arrêt.</div>
+    </div>
+    <div class="mat-chips"><span class="chip">3 plots</span><span class="chip">4 ballons</span><span class="chip">1 serveur</span></div>
+  </div>
+
+  <div class="card" id="gk-g3">
+    <div class="card-title">G3 — Plongeons par paliers (sécurité d'abord)</div>
+    <div class="exo-block tact">
+      <div class="exo-label tact">⏱ 15 min · Progression par confiance</div>
+      <ul class="exo-steps">
+        <li><strong>Palier 1 — assis :</strong> ballon roulé sur le côté, saisie au sol en basculant</li>
+        <li><strong>Palier 2 — à genoux :</strong> même chose, le corps apprend à tomber côté ballon</li>
+        <li><strong>Palier 3 — accroupi :</strong> ballon roulé plus loin, extension vers le sol</li>
+        <li><strong>Palier 4 — debout :</strong> ballon lancé à mi-hauteur, plongeon complet</li>
+        <li>Amortir avec la séquence <strong>ballon → avant-bras → épaule → hanche</strong> — jamais le coude planté, jamais le poignet seul</li>
+      </ul>
+      <div class="tip"><strong>⚠️ Sécurité</strong>Jamais de plongeons à froid, jamais sur sol dur ou caillouteux. Si le terrain est sec en été, garde les paliers 1-2 seulement ou reporte. Un gardien qui a peur de tomber ne plongera jamais en match — la confiance se construit palier par palier, pas en le jetant au sol.</div>
+    </div>
+    <div class="mat-chips"><span class="chip">4 ballons</span><span class="chip">1 serveur</span><span class="chip">Herbe correcte obligatoire</span></div>
+  </div>
+
+  <div class="card" id="gk-g4">
+    <div class="card-title">G4 — Jeu au pied & relances</div>
+    <div class="exo-block jeu">
+      <div class="exo-label jeu">⏱ 10 min · Le gardien moderne</div>
+      <ul class="exo-steps">
+        <li>Contrôle-passe avec le serveur qui presse doucement, comme un attaquant qui vient</li>
+        <li>Relance mi-longue sur cible : un carré de 4 plots à ~25 m, 1 point si le ballon retombe dedans</li>
+        <li>Alterner pied fort / pied faible dès que le pied fort est fiable</li>
+        <li>Règle moderne à lui apprendre : <strong>le gardien est le +1 de la construction</strong> — il ne dégage pas, il choisit</li>
+      </ul>
+    </div>
+    <div class="mat-chips"><span class="chip">4 plots (cible)</span><span class="chip">4 ballons</span><span class="chip">1 serveur</span></div>
+  </div>
+
+  <div class="card" id="gk-g5">
+    <div class="card-title">G5 — Sorties aériennes</div>
+    <div class="exo-block tech">
+      <div class="exo-label tech">⏱ 10 min · Le geste qui rassure toute la défense</div>
+      <ul class="exo-steps">
+        <li>Serveur qui lance en cloche dans la zone des 6 mètres</li>
+        <li>Appel fort obligatoire : <strong>« J'AI ! »</strong> avant chaque sortie — la voix fait partie du geste</li>
+        <li>Prise au point le plus haut, bras tendus, <strong>genou levé de protection</strong></li>
+        <li>Variante : un 2ème joueur gêne passivement (présence sans saut) pour habituer au contact</li>
+      </ul>
+      <div class="tip"><strong>💡 Astuce éduc</strong>Enchaîne cet exercice avec la séance Phases arrêtées (ST5 · VEN) : ce qu'il travaille ici en isolé, il le réinvestit sur les corners en situation réelle. C'est ton fil conducteur version gardien.</div>
+    </div>
+    <div class="mat-chips"><span class="chip">3 ballons</span><span class="chip">1-2 serveurs</span><span class="chip">Zone des 6 m</span></div>
+  </div>
+
+  <div class="section-title">Conseils gardien en club amateur</div>
+
+  <div class="card">
+    <ul class="exo-steps">
+      <li><strong>Pas de gardien fixe ?</strong> Fais tourner 2-3 volontaires sur les matchs d'entraînement, mais garde le travail spécifique pour celui qui garde en match officiel. Ne force jamais un joueur à aller au but en punition — c'est le meilleur moyen de dégoûter du poste.</li>
+      <li><strong>Valorise le poste :</strong> à chaque bel arrêt en match ou à l'entraînement, dis-le à voix haute devant le groupe. Le gardien est le poste le plus courageux et le plus solitaire — il a besoin de reconnaissance publique.</li>
+      <li><strong>La voix avant la détente :</strong> un gardien U15 qui parle (« J'ai ! », « Sors ! », « Gauche ! ») progresse plus vite que celui qui plonge bien en silence. Exige la communication sur chaque exercice.</li>
+      <li><strong>Les gants :</strong> utiles mais pas indispensables à l'entraînement par temps sec. En revanche, vérifie qu'il ne garde pas avec des gants troués en match — les doigts se blessent sur les ballons puissants.</li>
+      <li><strong>Après une erreur en match :</strong> jamais de reproche à chaud. Le gardien est le seul joueur dont chaque erreur finit au fond des filets. Debrief à froid, à la séance suivante, en commençant par ce qu'il a bien fait.</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════ PAGE 6 : FICHE IMPRIMABLE -->
+<div class="page" id="page-fiche">
+
+  <div class="fiche-actions">
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimer cette fiche</button>
+    <button class="btn-reset" onclick="resetFiche()">Effacer mes saisies</button>
+    <span style="font-size:12px; color:var(--gris); align-self:center;">Clique dans les champs pour les remplir, puis imprime (ou « Enregistrer en PDF »).</span>
+  </div>
+
+  <div class="composer">
+    <div class="composer-title">⚡ Composer la séance automatiquement</div>
+    <div class="composer-field composer-theme">
+      <label>Thème de la séance — remplit toute la fiche d'un coup</label>
+      <select onchange="applyTheme(this.value)">
+        <option value="">— choisir un thème —</option>
+        <option value="conservation">Conservation &amp; jeu court</option>
+        <option value="conduite">Conduite &amp; dribble</option>
+        <option value="largeur">Largeur &amp; jeu à 11</option>
+        <option value="defense">Défense collective</option>
+        <option value="transitions">Transitions</option>
+        <option value="finition">Finition</option>
+        <option value="arretees">Phases arrêtées</option>
+        <option value="vitesse">Vitesse &amp; coordination</option>
+      </select>
+    </div>
+    <div class="composer-grid">
+      <div class="composer-field">
+        <label>Échauffement</label>
+        <select id="sel-echauffement" onchange="fillRow('echauffement', this.value)">
+          <option value="">—</option>
+          <option value="rondo">Rondo 5v2</option>
+          <option value="slalom">Slalom de conduite</option>
+          <option value="echelle">Échelle d'agilité</option>
+        </select>
+      </div>
+      <div class="composer-field">
+        <label>Technique</label>
+        <select id="sel-technique" onchange="fillRow('technique', this.value)">
+          <option value="">—</option>
+          <option value="passe-va">Passe &amp; va en triangle</option>
+          <option value="slalom">Slalom de conduite</option>
+          <option value="1v1">Dribble 1v1 en couloir</option>
+          <option value="finition">Circuit de finition</option>
+          <option value="bloc">Bloc défensif qui glisse</option>
+          <option value="corner">Corner premier poteau</option>
+        </select>
+      </div>
+      <div class="composer-field">
+        <label>Jeu réduit</label>
+        <select id="sel-jeu" onchange="fillRow('jeu', this.value)">
+          <option value="">—</option>
+          <option value="rondo">Rondo 5v2</option>
+          <option value="conservation">Conservation 6v3</option>
+          <option value="couloirs">Jeu des couloirs</option>
+          <option value="pressing">Pressing haut</option>
+          <option value="contre">Contre-attaque 3v2</option>
+          <option value="portes">Jeu des portes 4v4</option>
+          <option value="corner">Corner premier poteau</option>
+        </select>
+      </div>
+      <div class="composer-field">
+        <label>Match</label>
+        <select id="sel-match" onchange="fillRow('match', this.value)">
+          <option value="">—</option>
+          <option value="m-libre">Match libre 8v8</option>
+          <option value="m-grand">Match libre sur grand terrain</option>
+          <option value="m-3touches">Match — 3 touches max</option>
+          <option value="m-3passes">Match — but après 3 passes</option>
+          <option value="m-transition">Match — bonus transition (−10s)</option>
+          <option value="m-defense">Match — défense compacte (≤25 m)</option>
+          <option value="m-corners">Match — corners provoqués</option>
+          <option value="m-tete">Match — but de la tête × 3</option>
+        </select>
+      </div>
+    </div>
+    <div class="composer-hint">Choisis un thème pour tout pré-remplir, ou compose phase par phase. Le texte reste modifiable à la main avant d'imprimer.</div>
+  </div>
+
+  <div class="fiche" id="fiche-sheet">
+    <h2>Fiche de séance <small>Catégorie U15 · Football</small></h2>
+
+    <div class="fiche-grid">
+      <div class="fiche-field"><label>Club</label><span class="fill editable" contenteditable="true" data-ph="nom du club"></span></div>
+      <div class="fiche-field"><label>Date</label><span class="fill editable" contenteditable="true" data-ph="jj / mm / aaaa"></span></div>
+      <div class="fiche-field"><label>Éducateur</label><span class="fill editable" contenteditable="true" data-ph="ton nom"></span></div>
+      <div class="fiche-field"><label>Durée</label><span class="fill editable" contenteditable="true">1 h 15</span></div>
+      <div class="fiche-field"><label>Nombre de joueurs</label><span class="fill editable" contenteditable="true" data-ph="présents"></span></div>
+      <div class="fiche-field"><label>Météo / terrain</label><span class="fill editable" contenteditable="true" data-ph="ex : sec / gras"></span></div>
+    </div>
+
+    <div class="fiche-grid" style="grid-template-columns:1fr;">
+      <div class="fiche-field"><label>Thème de la séance</label><span id="f-theme" class="fill editable" contenteditable="true" data-ph="ex : conservation du ballon"></span></div>
+      <div class="fiche-field"><label>Objectif principal</label><span id="f-objectif" class="fill editable" contenteditable="true" data-ph="ce que les joueurs doivent avoir progressé en fin de séance"></span></div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th style="width:46px;">Temps</th><th style="width:96px;">Phase</th><th>Contenu / Exercice</th><th style="width:120px;">Matériel</th><th style="width:150px;">Consignes clés</th></tr>
+      </thead>
+      <tbody>
+        <tr data-phase="echauffement">
+          <td class="tcol">15'</td>
+          <td class="pcol">Échauffement</td>
+          <td class="fill editable c-contenu" contenteditable="true" data-ph="ex : échelle d'agilité + passes par 2"></td>
+          <td class="fill editable c-mat" contenteditable="true" data-ph="plots, ballons"></td>
+          <td class="fill editable c-consigne" contenteditable="true" data-ph="monter progressivement l'intensité"></td>
+        </tr>
+        <tr data-phase="technique">
+          <td class="tcol">20'</td>
+          <td class="pcol">Technique</td>
+          <td class="fill editable c-contenu" contenteditable="true" data-ph="ex : passe & va en triangle"></td>
+          <td class="fill editable c-mat" contenteditable="true" data-ph=""></td>
+          <td class="fill editable c-consigne" contenteditable="true" data-ph="bouge après ta passe"></td>
+        </tr>
+        <tr data-phase="jeu">
+          <td class="tcol">20'</td>
+          <td class="pcol">Jeu réduit</td>
+          <td class="fill editable c-contenu" contenteditable="true" data-ph="ex : conservation 6v3"></td>
+          <td class="fill editable c-mat" contenteditable="true" data-ph=""></td>
+          <td class="fill editable c-consigne" contenteditable="true" data-ph="cherche l'appui libre"></td>
+        </tr>
+        <tr data-phase="match">
+          <td class="tcol">15'</td>
+          <td class="pcol">Match</td>
+          <td class="fill editable c-contenu" contenteditable="true" data-ph="ex : 8v8 avec règle à thème"></td>
+          <td class="fill editable c-mat" contenteditable="true" data-ph="chasubles, buts"></td>
+          <td class="fill editable c-consigne" contenteditable="true" data-ph="réinvestir le thème du jour"></td>
+        </tr>
+        <tr data-phase="retour">
+          <td class="tcol">5'</td>
+          <td class="pcol">Retour au calme</td>
+          <td class="fill editable c-contenu" contenteditable="true" data-ph="étirements + debriefing en cercle"></td>
+          <td class="fill editable c-mat" contenteditable="true" data-ph=""></td>
+          <td class="fill editable c-consigne" contenteditable="true" data-ph="1 chose apprise par joueur"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="fiche-box" style="min-height:120px;">
+      <span class="lbl">Schéma / disposition du terrain (à dessiner à la main)</span>
+      <div style="min-height:90px;"></div>
+    </div>
+
+    <div class="fiche-box">
+      <span class="lbl">Bilan après la séance</span>
+      <div class="fill editable" contenteditable="true" data-ph="ce qui a marché / ce qui n'a pas marché / à retravailler"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function showTab(name) {
+    var back = document.getElementById('btn-back-seance');
+    if (back) back.style.display = 'none';
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function toggleSeance(id) {
+    const wrap = document.getElementById(id);
+    wrap.classList.toggle('open');
+  }
+
+  var lastSeanceOrigin = null;
+
+  function goToSchema(schemaId, btn) {
+    // mémorise la séance d'origine pour le bouton retour
+    lastSeanceOrigin = null;
+    if (btn) {
+      var wrap = btn.closest('.seance-wrap');
+      if (wrap) lastSeanceOrigin = wrap.id;
+    }
+    // bascule vers l'onglet Exercices & schémas
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      if (b.textContent.indexOf('Exercices') !== -1) b.classList.add('active');
+    });
+    document.getElementById('page-exercices').classList.add('active');
+    // affiche le bouton retour uniquement si on vient d'une séance
+    var back = document.getElementById('btn-back-seance');
+    if (back) back.style.display = lastSeanceOrigin ? 'flex' : 'none';
+    // défile jusqu'au schéma et le met en surbrillance
+    const el = document.getElementById(schemaId);
+    if (el) {
+      setTimeout(function () {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.classList.add('schema-highlight');
+        setTimeout(function () { el.classList.remove('schema-highlight'); }, 1800);
+      }, 60);
+    }
+  }
+
+  function goToGardien(gkId, btn) {
+    lastSeanceOrigin = null;
+    if (btn) {
+      var wrap = btn.closest('.seance-wrap');
+      if (wrap) lastSeanceOrigin = wrap.id;
+    }
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      if (b.textContent.indexOf('Gardien') !== -1) b.classList.add('active');
+    });
+    document.getElementById('page-gardien').classList.add('active');
+    var back = document.getElementById('btn-back-seance');
+    if (back) back.style.display = lastSeanceOrigin ? 'flex' : 'none';
+    const el = document.getElementById(gkId);
+    if (el) {
+      setTimeout(function () {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.classList.add('schema-highlight');
+        setTimeout(function () { el.classList.remove('schema-highlight'); }, 1800);
+      }, 60);
+    }
+  }
+
+  function backToSeance() {
+    if (!lastSeanceOrigin) return;
+    // rebascule vers l'onglet Séances type
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      if (b.textContent.indexOf('Séances') !== -1) b.classList.add('active');
+    });
+    document.getElementById('page-seances').classList.add('active');
+    document.getElementById('btn-back-seance').style.display = 'none';
+    // rouvre la séance d'origine et défile jusqu'à elle
+    var el = document.getElementById(lastSeanceOrigin);
+    if (el) {
+      el.classList.add('open');
+      setTimeout(function () {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.classList.add('schema-highlight');
+        setTimeout(function () { el.classList.remove('schema-highlight'); }, 1500);
+      }, 60);
+    }
+  }
+
+  function resetFiche() {
+    document.querySelectorAll('#fiche-sheet .editable').forEach(function (el) {
+      // garde la durée pré-remplie, vide le reste
+      if (el.textContent.trim() === '1 h 15') return;
+      el.textContent = '';
+    });
+    document.querySelectorAll('.composer select').forEach(function (s) { s.value = ''; });
+  }
+
+  // Données des exercices + matches : { contenu, matériel, consigne clé }
+  var DATA = {
+    'passe-va':     { name: 'Passe & va en triangle',      mat: '3 plots, 1 ballon/trio',     consigne: 'Bouge après ta passe' },
+    'rondo':        { name: 'Rondo 5v2',                   mat: '4 plots, 1 ballon',          consigne: 'Oriente-toi avant de recevoir' },
+    'couloirs':     { name: 'Jeu des couloirs',            mat: '8 plots/chasubles',          consigne: 'Occupe toute la largeur' },
+    'pressing':     { name: 'Pressing haut',               mat: 'plots zone, chasubles',      consigne: 'Presse au signal, coupe les passes' },
+    'conservation': { name: 'Conservation 6v3',            mat: '4 plots, 1 ballon',          consigne: "Cherche l'appui libre" },
+    'bloc':         { name: 'Bloc défensif qui glisse',    mat: 'chasubles, 1 ballon',        consigne: 'On glisse ensemble côté ballon' },
+    'contre':       { name: 'Contre-attaque 3v2',          mat: 'cage + gardien',             consigne: 'Lève la tête dès la récupération' },
+    'corner':       { name: 'Corner premier poteau',       mat: 'cage + gardien',             consigne: 'Attaque le ballon en mouvement' },
+    'slalom':       { name: 'Slalom de conduite',          mat: '6-8 plots, 1 ballon/joueur', consigne: 'Tête haute, les deux pieds' },
+    '1v1':          { name: 'Dribble 1v1 en couloir',      mat: '4 plots/couloir, 1 ballon',  consigne: 'Provoque puis élimine' },
+    'portes':       { name: 'Jeu des portes 4v4',          mat: '8 plots, 1 ballon',          consigne: "Trouve l'espace libre" },
+    'finition':     { name: 'Circuit de finition',         mat: 'cage + gardien, ballons',    consigne: 'Frappe des deux pieds' },
+    'echelle':      { name: "Échelle d'agilité",           mat: '8 plots',                    consigne: 'Appuis rapides, regard devant' },
+    'm-libre':      { name: 'Match libre 8v8',             mat: 'chasubles, buts',            consigne: 'Laisser jouer, mélanger les niveaux' },
+    'm-grand':      { name: 'Match libre sur grand terrain',mat: 'chasubles, buts',           consigne: 'Occuper tout l\'espace' },
+    'm-3touches':   { name: 'Match — 3 touches max',       mat: 'chasubles, buts',            consigne: 'Regarder avant de recevoir' },
+    'm-3passes':    { name: 'Match — but après 3 passes',  mat: 'chasubles, buts',            consigne: 'Construire avant de conclure' },
+    'm-transition': { name: 'Match — bonus transition (−10s)', mat: 'chasubles, buts',        consigne: 'Attaquer vite après récupération' },
+    'm-defense':    { name: 'Match — défense compacte (≤25 m)', mat: 'chasubles, buts',       consigne: 'Rester groupés, garder la ligne' },
+    'm-corners':    { name: 'Match — corners provoqués',   mat: 'cage, gardien',              consigne: 'Répéter les routines de corner' },
+    'm-tete':       { name: 'Match — but de la tête × 3',  mat: 'chasubles, buts',            consigne: 'Chercher les centres' }
+  };
+
+  // Modèles de séance par thème
+  var THEMES = {
+    'conservation': { theme: 'Conservation & jeu court',   objectif: 'Garder le ballon et jouer vers l\'appui libre', echauffement: 'rondo',   technique: 'passe-va', jeu: 'conservation', match: 'm-3passes' },
+    'conduite':     { theme: 'Conduite & dribble',         objectif: 'Oser conduire et éliminer en 1v1',              echauffement: 'slalom',  technique: '1v1',      jeu: 'portes',       match: 'm-3touches' },
+    'largeur':      { theme: 'Largeur & jeu à 11',         objectif: 'Occuper toute la largeur du terrain',           echauffement: 'rondo',   technique: 'passe-va', jeu: 'couloirs',     match: 'm-grand' },
+    'defense':      { theme: 'Défense collective',         objectif: 'Défendre en bloc et glisser ensemble',          echauffement: 'echelle', technique: 'bloc',     jeu: 'pressing',     match: 'm-defense' },
+    'transitions':  { theme: 'Transitions',                objectif: 'Passer vite de la défense à l\'attaque',        echauffement: 'echelle', technique: 'passe-va', jeu: 'contre',       match: 'm-transition' },
+    'finition':     { theme: 'Finition',                   objectif: 'Marquer : qualité de frappe et déplacements',   echauffement: 'slalom',  technique: 'finition', jeu: 'contre',       match: 'm-tete' },
+    'arretees':     { theme: 'Phases arrêtées',            objectif: 'Être dangereux et organisé sur les corners',    echauffement: 'rondo',   technique: 'corner',   jeu: 'corner',       match: 'm-corners' },
+    'vitesse':      { theme: 'Vitesse & coordination',     objectif: 'Gagner en vivacité et qualité d\'appuis',       echauffement: 'echelle', technique: 'slalom',   jeu: 'portes',       match: 'm-libre' }
+  };
+
+  function fillRow(phase, key) {
+    if (!key) return;
+    var row = document.querySelector('#fiche-sheet tr[data-phase="' + phase + '"]');
+    var d = DATA[key];
+    if (!row || !d) return;
+    row.querySelector('.c-contenu').textContent = d.name;
+    row.querySelector('.c-mat').textContent = d.mat;
+    row.querySelector('.c-consigne').textContent = d.consigne;
+    var sel = document.getElementById('sel-' + phase);
+    if (sel) sel.value = key;
+  }
+
+  function applyTheme(themeKey) {
+    if (!themeKey) return;
+    var t = THEMES[themeKey];
+    if (!t) return;
+    document.getElementById('f-theme').textContent = t.theme;
+    document.getElementById('f-objectif').textContent = t.objectif;
+    fillRow('echauffement', t.echauffement);
+    fillRow('technique', t.technique);
+    fillRow('jeu', t.jeu);
+    fillRow('match', t.match);
+  }
+
+  // Grille d'évaluation dynamique
+  const criteres = [
+    { label: "Passe intérieure du pied", cat: "tech" },
+    { label: "Contrôle du ballon", cat: "tech" },
+    { label: "Conduite de balle", cat: "tech" },
+    { label: "1v1 offensif (tente le dribble)", cat: "tech" },
+    { label: "Occupe le terrain (largeur)", cat: "tact" },
+    { label: "Demande le ballon vocalement", cat: "tact" },
+    { label: "Revient défendre", cat: "tact" },
+    { label: "Endurance (tient 40 min)", cat: "phys" },
+    { label: "Encourage ses coéquipiers", cat: "comp" },
+    { label: "Accepte ses erreurs", cat: "comp" },
+  ];
+  const cats = { tech: "#2b9ddb", tact: "#8b5cf6", phys: "#f0861a", comp: "#1DB954" };
+
+  const grid = document.getElementById('eval-grid');
+  criteres.forEach(c => {
+    const row = document.createElement('div');
+    row.style = "display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid #1a4a2833;";
+    row.innerHTML = `
+      <span style="flex:1; font-size:13px;">${c.label}</span>
+      <span style="display:flex; gap:4px;">
+        ${[1,2,3,4,5].map(n => `<button onclick="rate(this,${n})" data-v="${n}" style="width:26px; height:26px; border-radius:50%; border:1px solid ${cats[c.cat]}; background:transparent; color:${cats[c.cat]}; cursor:pointer; font-size:11px; font-weight:700;">${n}</button>`).join('')}
+      </span>`;
+    grid.appendChild(row);
+  });
+
+  function rate(btn, val) {
+    const btns = btn.parentElement.querySelectorAll('button');
+    btns.forEach((b, i) => {
+      const color = btn.style.borderColor || '#1DB954';
+      b.style.background = i < val ? b.style.borderColor || '#1DB954' : 'transparent';
+      b.style.color = i < val ? '#fff' : b.style.borderColor || '#1DB954';
+    });
+  }
+</script>
+
+<footer style="max-width:900px; margin:30px auto 0; padding:14px 16px; border-top:1px solid #1a4a28; text-align:center; font-size:11px; color:#8a9e8e;">
+  © 2026 Philippe COLUCCI — Méthode Philippe Colucci · Programme U15 — Tous droits réservés.<br>
+  Reproduction, diffusion ou commercialisation interdites sans autorisation de l'auteur.
+</footer>
+</body>
+</html>
