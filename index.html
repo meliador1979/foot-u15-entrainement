@@ -263,6 +263,19 @@
   }
   .tip strong { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--orange); margin-bottom: 4px; }
 
+  /* ── FIL CONDUCTEUR DE SÉANCE ── */
+  .fil-seance {
+    margin-top: 14px;
+    background: #0a2e0a;
+    border: 1px solid var(--vert);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .fil-seance .fico { flex-shrink: 0; font-size: 18px; }
+  .fil-seance strong { color: var(--vert); display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px; }
+
   /* ── BOUTON VERS SCHÉMA ── */
   .schema-link {
     display: inline-flex; align-items: center; gap: 6px;
@@ -279,6 +292,35 @@
     transition: background .2s, color .2s;
   }
   .schema-link:hover { background: var(--vert); color: #06250f; }
+  .gk-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 10px; margin-left: 8px;
+    background: #2a1a00;
+    border: 1px solid var(--orange);
+    color: var(--orange);
+    border-radius: 6px;
+    padding: 6px 13px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: .5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+  }
+  .gk-link:hover { background: var(--orange); color: #2a1a00; }
+  .btn-back-seance {
+    position: fixed; bottom: 20px; right: 16px; z-index: 50;
+    display: none; align-items: center; gap: 8px;
+    background: var(--vert); color: #06250f;
+    border: none; border-radius: 30px;
+    padding: 12px 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px; font-weight: 700; letter-spacing: .5px;
+    text-transform: uppercase; cursor: pointer;
+    box-shadow: 0 4px 18px #00000088;
+  }
+  .btn-back-seance:hover { background: #3ed87a; }
+  @media print { .btn-back-seance { display: none !important; } }
+
   .schema-highlight {
     box-shadow: 0 0 0 3px var(--vert), 0 0 18px #1db95466;
     transition: box-shadow .3s;
@@ -320,6 +362,16 @@
   .fiche-box .lbl { font-weight: 700; color: #0f5c2e; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; display: block; margin-bottom: 4px; }
   .fiche-box .fill { outline: none; min-height: 50px; }
   .fiche .editable:empty:before { content: attr(data-ph); color: #9bb0a2; font-style: italic; }
+
+  /* ── ONGLET GARDIEN ── */
+  .gk-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .gk-table th { background: #0a3d1f; color: var(--vert); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; padding: 7px 9px; text-align: left; }
+  .gk-table td { border: 1px solid #1a4a28; padding: 7px 9px; vertical-align: top; }
+  .gk-table td:first-child { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; white-space: nowrap; color: var(--blanc); }
+  .gk-table tr:nth-child(even) td { background: #0a2a14; }
+  .gk-avec { color: #8ff0b8; }
+  .gk-spe { color: var(--jaune, #f0c030); color: #f0c030; }
+  .gk-or td { background: #1a2a0a !important; }
 
   /* ── COMPOSEUR DE SÉANCE ── */
   .composer { max-width: 800px; margin: 0 auto 16px; background: var(--card-bg); border: 1px solid #1a4a28; border-radius: 10px; padding: 16px 20px; }
@@ -424,8 +476,10 @@
   <button class="tab-btn" onclick="showTab('exercices')">⚽ Exercices & schémas</button>
   <button class="tab-btn" onclick="showTab('objectifs')">🎯 Objectifs</button>
   <button class="tab-btn" onclick="showTab('conseils')">💡 Conseils éduc</button>
+  <button class="tab-btn" onclick="showTab('gardien')">🧤 Gardien</button>
   <button class="tab-btn" onclick="showTab('fiche')">🖨️ Fiche séance</button>
 </nav>
+<button class="btn-back-seance" id="btn-back-seance" onclick="backToSeance()">← Retour à la séance</button>
 
 <!-- ══════════════════════════════════════════════════════ PAGE 1 : PROGRAMME ANNUEL -->
 <div class="page active" id="page-programme">
@@ -475,9 +529,15 @@
   <div class="card">
     <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
       <span class="badge badge-prep">Phase 1</span>
-      <span style="font-weight:700;">Juillet – Août · Préparation physique & découverte</span>
+      <span style="font-weight:700;">Fin août · Reprise express — 3 semaines, ~6 séances</span>
     </div>
-    <p style="font-size:13px; color:#c0d0c4;">Remise en forme progressive. Cohésion de groupe. Découvrir les joueurs et évaluer les niveaux. Exercices simples et amusants. Beaucoup de jeu libre.</p>
+    <p style="font-size:13px; color:#c0d0c4; margin-bottom:10px;">Pas de joueurs en juillet : c'est la norme en club amateur familial, pas un problème. À 14-15 ans la condition se reconstruit par le jeu — on priorise sans pitié sur les 6 séances disponibles :</p>
+    <ul class="exo-steps" style="font-size:13px;">
+      <li><strong>Semaine 1 (séances 1-2)</strong> : 100% cohésion et plaisir. Beaucoup de jeu, zéro consigne. Objectif caché : observer qui est qui, qui sait faire quoi.</li>
+      <li><strong>Semaine 2 (séances 3-4)</strong> : bases techniques (passe, conduite) + première découverte du grand terrain pour ceux qui viennent du foot à 8. Intensité en montée douce.</li>
+      <li><strong>Semaine 3 (séances 5-6)</strong> : jeu à 11, occupation des espaces, un match d'entraînement grandeur nature. Les joueurs arrivent au premier match en sachant à peu près où se placer.</li>
+    </ul>
+    <div class="tip" style="margin-top:10px;"><strong>⚠️ Vigilance blessures</strong>Les 2-3 premières semaines après la coupure sont celles où il y a le plus de blessures (ischios, chevilles). Échauffements soignés, pas de frappes à froid, pas de sprints max en séance 1. Et accepte que les premiers matchs soient brouillons — toute ta poule est dans le même cas.</div>
     <div class="mat-chips">
       <span class="chip">Physique 40%</span><span class="chip">Technique 35%</span><span class="chip">Plaisir 25%</span>
     </div>
@@ -529,8 +589,8 @@
 
   <div class="section-title">Calendrier mois par mois</div>
   <div class="months-grid">
-    <div class="month-card"><div class="mname">Juillet</div><div class="mtheme">Reprise & cohésion</div><div class="mphase">Préparation</div></div>
-    <div class="month-card"><div class="mname">Août</div><div class="mtheme">Condition physique</div><div class="mphase">Préparation</div></div>
+    <div class="month-card"><div class="mname">Juillet</div><div class="mtheme">Vacances — pas d'entraînement</div><div class="mphase">Repos / foot libre entre copains</div></div>
+    <div class="month-card"><div class="mname">Août</div><div class="mtheme">Reprise express (fin août)</div><div class="mphase">Préparation · 3 semaines</div></div>
     <div class="month-card"><div class="mname">Septembre</div><div class="mtheme">Technique de base</div><div class="mphase">Compétition 1</div></div>
     <div class="month-card"><div class="mname">Octobre</div><div class="mtheme">Jeu à 11 — espace</div><div class="mphase">Compétition 1</div></div>
     <div class="month-card"><div class="mname">Novembre</div><div class="mtheme">Défense collective</div><div class="mphase">Compétition 1</div></div>
@@ -579,7 +639,7 @@
   <p style="font-size:13px; color:var(--gris); margin-bottom:6px;">Les 10 séances sont regroupées en <strong>5 semaines types</strong>, une par phase de la saison. Chaque semaine type = une <strong>séance du mardi</strong> (plutôt apprentissage) + une <strong>séance du vendredi</strong> (plutôt jeu). Tu rejoues une même semaine type pendant plusieurs semaines, en augmentant la difficulté grâce aux variantes des exercices.</p>
   <div class="tip" style="max-width:none; margin-bottom:8px;"><strong>❄️ Et la trêve de janvier ?</strong>Pendant la trêve, tu rejoues les semaines types 2 et 3 en allégeant l'intensité (terrain souvent gras/froid) et en ciblant les points faibles repérés.</div>
 
-  <div class="section-title" style="font-size:18px; margin-top:30px;">Semaine type 1 · Préparation (juillet-août)</div>
+  <div class="section-title" style="font-size:18px; margin-top:30px;">Semaine type 1 · Reprise express (fin août, 3 semaines)</div>
 
   <div class="seance-wrap" id="s1">
     <div class="seance-header" onclick="toggleSeance('s1')">
@@ -591,17 +651,18 @@
       <div class="sarrow">▶</div>
     </div>
     <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : Reprendre en confiance et avec plaisir</strong>Tout est simple aujourd'hui : gestes de base, jeu libre, zéro pression. L'objectif caché : observer les niveaux.</span></div>
       <div class="exo-block phys">
         <div class="exo-label phys">⏱ 15 min · Échauffement</div>
-        <div class="exo-title">Le Zapping — Course à thèmes</div>
-        <div class="exo-duration">Matériel : 8 cônes · Espace : moitié de terrain</div>
+        <div class="exo-title">Le Zapping — Montée progressive en 4 phases</div>
+        <div class="exo-duration">Matériel : 8 cônes · 1 ballon par joueur · Espace : moitié de terrain · Les 4 phases s'enchaînent UNE fois, dans l'ordre</div>
         <ul class="exo-steps">
-          <li>Jogging libre en cercle 3 min, changement de direction au signal</li>
-          <li>Sur 2 plots face à face : course avant → retour en arrière → course latérale</li>
-          <li>Jongle libre avec le ballon 2 min (débutants : main, intermédiaires : pied)</li>
-          <li>Étirements dynamiques en groupe : mollets, hanches, épaules</li>
+          <li><strong>Phase 1 (3 min) — Mise en route ballon :</strong> jonglage libre à l'arrêt puis en marchant (débutants : main autorisée, intermédiaires : pied)</li>
+          <li><strong>Phase 2 (4 min) — Jogging à thèmes :</strong> course libre sur la moitié de terrain, changement de direction au signal (voix, sifflet, geste)</li>
+          <li><strong>Phase 3 (5 min) — Navettes en intensité croissante :</strong> sur 2 plots espacés de 10 m : course avant → retour en arrière → pas chassés latéraux, de plus en plus vite à chaque passage</li>
+          <li><strong>Phase 4 (3 min) — Accélérations progressives :</strong> 3-4 lignes droites de 20 m en montant à ~80% de la vitesse max, puis mobilité rapide (hanches, chevilles)</li>
         </ul>
-        <div class="tip"><strong>💡 Astuce éduc</strong>Laisse les joueurs choisir la vitesse. Premier jour = plaisir, pas performance. Ris avec eux si ça jongle mal.</div>
+        <div class="tip"><strong>💡 Astuce éduc</strong>L'intensité ne fait que monter : on finit prêt à jouer, jamais essoufflé. Et ne t'inquiète pas pour l'endurance de reprise — elle ne vient pas de l'échauffement mais du cumul de la séance : le 3v3 et le match génèrent bien plus de charge cardio qu'un footing, et de façon intermittente comme en match. La condition physique se reconstruit sur les semaines de la phase 1, pas en une séance.</div>
       </div>
 
       <div class="exo-block tech">
@@ -614,7 +675,7 @@
           <li>Variante : après la passe, le passeur court et touche le plot derrière son partenaire</li>
           <li>Dernier tour : passe + déplacement + contrôle orienté (se retourner après contrôle)</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-passe-va')">📐 Voir le schéma</button>
+        <button class="schema-link" onclick="goToSchema('schema-passe-va', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g1', this)">🧤 Gardien : prises de balle (G1)</button>
         <div class="tip"><strong>💡 Astuce éduc</strong>Pour les débutants : montre d'abord en slow-motion le bon appui du pied (intérieur, pied à plat). Un geste juste vaut mieux que 100 passes mal faites.</div>
       </div>
 
@@ -634,6 +695,7 @@
         <div class="exo-label jeu">⏱ 15 min · Match</div>
         <div class="exo-title">7v7 ou 8v8 — Match libre</div>
         <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Aujourd'hui on joue, on tente, on se trompe — et c'est parfait comme ça. »</em></li>
           <li>Match sans consigne tactique — laisse jouer !</li>
           <li>Mélange les niveaux dans les équipes</li>
           <li>Encourage les prises de risque, même ratées</li>
@@ -652,6 +714,7 @@
       <div class="sarrow">▶</div>
     </div>
     <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : Oser la conduite et le 1v1</strong>Chaque bloc pousse à provoquer balle au pied : slalom, duel, portes, puis match à touches limitées pour réinvestir.</span></div>
       <div class="exo-block phys">
         <div class="exo-label phys">⏱ 15 min · Échauffement</div>
         <div class="exo-title">Le labyrinthe de plots</div>
@@ -662,7 +725,7 @@
           <li>Variante : toucher les plots alternativement avec la main droite/gauche en accélérant</li>
           <li>3 passages chacun</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-slalom')">📐 Voir le schéma</button>
+        <button class="schema-link" onclick="goToSchema('schema-slalom', this)">📐 Voir le schéma</button>
       </div>
 
       <div class="exo-block tech">
@@ -676,7 +739,7 @@
           <li>Après 10 min : défenseur libre → vrai 1v1</li>
           <li>Rotation toutes les 2 min</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-1v1')">📐 Voir le schéma</button>
+        <button class="schema-link" onclick="goToSchema('schema-1v1', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g2', this)">🧤 Gardien : appuis & déplacements (G2)</button>
         <div class="tip"><strong>💡 Astuce éduc</strong>Les débutants auront du mal avec le 1v1. C'est normal ! Valorise le fait de tenter, pas le résultat. Un dribble raté mais essayé = progression.</div>
       </div>
 
@@ -690,13 +753,14 @@
           <li>Pas de gardien, pas de grandes cages = libère les attaquants</li>
           <li>Oblige à chercher l'espace et la conduite plutôt que le tir</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-portes')">📐 Voir le schéma</button>
+        <button class="schema-link" onclick="goToSchema('schema-portes', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g2', this)">🧤 Gardien : appuis & déplacements (G2)</button>
       </div>
 
       <div class="exo-block jeu">
         <div class="exo-label jeu">⏱ 15 min · Match</div>
         <div class="exo-title">Match — Règle : 3 touches max</div>
         <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Tout ce qu'on a fait en 1v1, c'est le moment de le tenter en vrai. »</em></li>
           <li>Match 8v8 avec règle : maximum 3 touches par possession</li>
           <li>Oblige à regarder avant de recevoir le ballon</li>
           <li>Pas de sanction si dépassé — juste encourager l'habitude</li>
@@ -717,6 +781,7 @@
       <div class="sarrow">▶</div>
     </div>
     <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : L'espace et la largeur</strong>Du rondo (espace réduit) aux couloirs (largeur imposée) jusqu'au grand terrain : le même apprentissage à trois échelles.</span></div>
       <div class="exo-block phys">
         <div class="exo-label phys">⏱ 15 min · Échauffement</div>
         <div class="exo-title">Rondo 5v2 — Conservation simple</div>
@@ -727,7 +792,7 @@
           <li>Maximum 2 touches pour les plus avancés</li>
           <li>Faire 2 groupes en parallèle</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-rondo')">📐 Voir le schéma</button>
+        <button class="schema-link" onclick="goToSchema('schema-rondo', this)">📐 Voir le schéma</button>
         <div class="tip"><strong>💡 Astuce éduc</strong>Le rondo est le meilleur échauffement technique. Les barcelonais l'utilisent à tous les niveaux. Simple à mettre en place et adoré des joueurs.</div>
       </div>
 
@@ -742,13 +807,14 @@
           <li>6v6 avec cette règle, discussion après sur ce que ça a changé</li>
           <li>Mot clé à enseigner : "Je suis libre !" pour demander le ballon</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-couloirs')">📐 Voir le schéma</button>
+        <button class="schema-link" onclick="goToSchema('schema-couloirs', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g4', this)">🧤 Gardien : jeu au pied & relances (G4)</button>
       </div>
 
       <div class="exo-block jeu">
         <div class="exo-label jeu">⏱ 30 min · Match global</div>
         <div class="exo-title">9v9 ou 10v10 — Terrain complet</div>
         <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Comme dans les couloirs : occupez tout le terrain, cherchez les côtés libres. »</em></li>
           <li>Premier match à 11 sur terrain quasi complet</li>
           <li>Consigne simple : "occupez tout le terrain, ne vous collez pas"</li>
           <li>Stop le jeu 1 ou 2 fois maximum pour pointer un espace libre — pas plus !</li>
@@ -768,6 +834,20 @@
       <div class="sarrow">▶</div>
     </div>
     <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : La finition</strong>Frapper juste, dans toutes les situations : ateliers, 2v1, puis match qui récompense la construction avant le tir.</span></div>
+      <div class="exo-block phys">
+        <div class="exo-label phys">⏱ 15 min · Échauffement</div>
+        <div class="exo-title">Montée en température avant les frappes</div>
+        <div class="exo-duration">Matériel : 1 ballon pour 2 · plots</div>
+        <ul class="exo-steps">
+          <li>Jogging + mobilité hanches/chevilles 4 min — jamais de frappe à froid</li>
+          <li>Passes par 2 en augmentant progressivement la distance et la force</li>
+          <li>Gammes de frappe légères à 8 m, sans viser, juste pour chauffer le geste</li>
+          <li>2-3 accélérations progressives pour finir</li>
+        </ul>
+        <div class="tip"><strong>💡 Astuce éduc</strong>Les frappes sollicitent fortement les ischio-jambiers. Un claquage sur frappe à froid est le classique des séances de finition — ces 15 minutes ne sont pas négociables.</div>
+      </div>
+
       <div class="exo-block tech">
         <div class="exo-label tech">⏱ 20 min · Technique</div>
         <div class="exo-title">Circuit de finition — 4 ateliers</div>
@@ -779,7 +859,7 @@
           <li>Atelier 4 : face au but avec gardien — feinte puis tir</li>
           <li>Rotation toutes les 4 min</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-finition')">📐 Voir le schéma</button>
+        <button class="schema-link" onclick="goToSchema('schema-finition', this)">📐 Voir le schéma</button>
       </div>
 
       <div class="exo-block tact">
@@ -797,6 +877,7 @@
         <div class="exo-label jeu">⏱ 20 min · Match à thème</div>
         <div class="exo-title">Match — But valide = suite d'au moins 3 passes</div>
         <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Les frappes des ateliers, maintenant en situation réelle : cherchez la position de tir. »</em></li>
           <li>But ne compte que si l'équipe a réalisé 3 passes avant le tir</li>
           <li>Encourage la combinaison plutôt que le tir immédiat</li>
           <li>Double les points si tir de l'extérieur de la surface</li>
@@ -817,6 +898,7 @@
       <div class="sarrow">▶</div>
     </div>
     <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : Conserver et bouger après la passe</strong>Le mot d'ordre unique de la séance : « bouge après ta passe ». Il traverse le triangle, le 6v3 et le match.</span></div>
       <div class="exo-block phys">
         <div class="exo-label phys">⏱ 15 min · Échauffement</div>
         <div class="exo-title">La balle au capitaine — passes en mouvement</div>
@@ -839,7 +921,7 @@
           <li>Consigne clé : « toujours deux solutions de passe pour le porteur »</li>
           <li>Variante : ajoute un défenseur passif qui gêne une des options</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-passe-va')">📐 Voir le schéma</button>
+        <button class="schema-link" onclick="goToSchema('schema-passe-va', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g3', this)">🧤 Gardien : plongeons par paliers (G3)</button>
         <div class="tip"><strong>💡 Astuce éduc</strong>Le mot magique à répéter toute la séance : « bouge après ta passe ! ». Un joueur qui passe et reste planté est le plus gros défaut à corriger à cet âge.</div>
       </div>
 
@@ -853,13 +935,14 @@
           <li>Si les 3 récupèrent, ils échangent avec ceux qui ont perdu le ballon</li>
           <li>Pour les forts : limite à 2 touches de balle</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-conservation')">📐 Voir le schéma</button>
+        <button class="schema-link" onclick="goToSchema('schema-conservation', this)">📐 Voir le schéma</button>
       </div>
 
       <div class="exo-block jeu">
         <div class="exo-label jeu">⏱ 15 min · Match</div>
         <div class="exo-title">Match — zone de conservation obligatoire</div>
         <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Le mot du jour reste le même : bouge après ta passe. »</em></li>
           <li>Match 8v8 normal</li>
           <li>Règle : avant de marquer, l'équipe doit faire 1 passe dans son propre camp</li>
           <li>Empêche le jeu « tout devant » et récompense la construction</li>
@@ -878,6 +961,7 @@
       <div class="sarrow">▶</div>
     </div>
     <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : Défendre ensemble</strong>La ligne qui glisse, le bloc compact : les miroirs préparent le rideau, le rideau prépare le match compact.</span></div>
       <div class="exo-block phys">
         <div class="exo-label phys">⏱ 15 min · Échauffement</div>
         <div class="exo-title">Les ombres — déplacements défensifs</div>
@@ -901,7 +985,7 @@
           <li>Puis on ajoute des attaquants : la ligne défend sans se faire trouer</li>
           <li>Mot clé : « on monte / on descend ensemble »</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-bloc')">📐 Voir le schéma</button>
+        <button class="schema-link" onclick="goToSchema('schema-bloc', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g1', this)">🧤 Gardien : prises de balle (G1)</button>
         <div class="tip"><strong>💡 Astuce éduc</strong>Pour visualiser le bloc, fais-leur tenir une vraie corde ou un élastique au début. Quand ils sentent qu'ils sont reliés, le concept rentre tout seul.</div>
       </div>
 
@@ -909,6 +993,7 @@
         <div class="exo-label jeu">⏱ 20 min · Match à thème</div>
         <div class="exo-title">Match — défense compacte</div>
         <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Comme le rideau : on glisse ensemble, on reste à moins de 25 mètres. »</em></li>
           <li>Match 8v8 ; l'équipe qui défend doit garder maximum 25m entre son dernier défenseur et son attaquant le plus avancé</li>
           <li>L'éducateur arrête le jeu si le bloc est trop étiré et le montre</li>
           <li>Bonus : 1 point si l'équipe récupère le ballon collectivement (pressing groupé)</li>
@@ -929,6 +1014,7 @@
       <div class="sarrow">▶</div>
     </div>
     <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : La transition rapide</strong>« Ballon récupéré = je lève la tête. » Réaction au signal, contre en 8 secondes, match à bonus transition.</span></div>
       <div class="exo-block phys">
         <div class="exo-label phys">⏱ 15 min · Échauffement</div>
         <div class="exo-title">Réaction au signal — départs explosifs</div>
@@ -952,7 +1038,7 @@
           <li>Consigne défensive : « le premier défenseur ralentit, les autres reviennent »</li>
           <li>Chronomètre les 8 secondes à voix haute pour créer l'urgence</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-contre')">📐 Voir le schéma</button>
+        <button class="schema-link" onclick="goToSchema('schema-contre', this)">📐 Voir le schéma</button><button class="gk-link" onclick="goToGardien('gk-g5', this)">🧤 Gardien : sorties aériennes (G5)</button>
         <div class="tip"><strong>💡 Astuce éduc</strong>La transition, c'est le moment où on gagne le plus de buts à ce niveau. Apprends-leur le réflexe : « ballon récupéré = je lève la tête ».</div>
       </div>
 
@@ -960,6 +1046,7 @@
         <div class="exo-label jeu">⏱ 20 min · Match</div>
         <div class="exo-title">Match — bonus transition</div>
         <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Ballon récupéré = je lève la tête. C'est le seul réflexe qu'on cherche. »</em></li>
           <li>Match 8v8 normal</li>
           <li>But marqué dans les 10 secondes après une récupération = compte double</li>
           <li>Encourage à attaquer vite quand l'adversaire est déséquilibré</li>
@@ -978,6 +1065,7 @@
       <div class="sarrow">▶</div>
     </div>
     <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : Le duel maîtrisé</strong>Tête et corps à corps abordés par paliers de confiance, puis réinvestis dans le match à bonus tête.</span></div>
       <div class="exo-block phys">
         <div class="exo-label phys">⏱ 15 min · Échauffement</div>
         <div class="exo-title">Échauffement nuque & équilibre</div>
@@ -1000,6 +1088,7 @@
           <li>Palier 3 : têtes en sautant, ballon lancé par l'éducateur</li>
           <li>Palier 4 (forts) : tête au but sur un centre à la main</li>
         </ul>
+        <button class="gk-link" onclick="goToGardien('gk-g5', this)">🧤 Gardien : sorties aériennes (G5)</button>
       </div>
 
       <div class="exo-block tact">
@@ -1018,6 +1107,7 @@
         <div class="exo-label jeu">⏱ 15 min · Match</div>
         <div class="exo-title">Match — bonus tête</div>
         <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Ce qu'on a fait par paliers, tentez-le si vous le sentez — jamais forcé. »</em></li>
           <li>Match normal ; but de la tête = compte triple</li>
           <li>Encourage les centres et les sauts (sans danger)</li>
         </ul>
@@ -1037,6 +1127,7 @@
       <div class="sarrow">▶</div>
     </div>
     <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : La vivacité</strong>Appuis, réaction, changements de direction — tout est court et explosif, jamais long et épuisant.</span></div>
       <div class="exo-block phys">
         <div class="exo-label phys">⏱ 15 min · Échauffement</div>
         <div class="exo-title">L'échelle de rythme (avec plots)</div>
@@ -1047,7 +1138,7 @@
           <li>Termine en accélérant sur 10m après la dernière case</li>
           <li>3 passages par variante</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-echelle')">📐 Voir le schéma</button>
+        <button class="schema-link" onclick="goToSchema('schema-echelle', this)">📐 Voir le schéma</button>
       </div>
 
       <div class="exo-block phys">
@@ -1060,7 +1151,7 @@
           <li>Atelier 3 : l'éducateur annonce une couleur, le joueur sprinte vers le plot de cette couleur</li>
           <li>Rotation toutes les 5 min, récupération entre les passages</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-slalom')">📐 Voir le schéma (slalom)</button>
+        <button class="schema-link" onclick="goToSchema('schema-slalom', this)">📐 Voir le schéma (slalom)</button>
         <div class="tip"><strong>💡 Astuce éduc</strong>À cet âge, la coordination progresse énormément. Ces exercices sont parfaits en début de phase. Garde-les courts et explosifs : la qualité prime sur la quantité, sinon ça devient de l'endurance.</div>
       </div>
 
@@ -1068,6 +1159,7 @@
         <div class="exo-label jeu">⏱ 25 min · Jeu</div>
         <div class="exo-title">Épervier-ballon & match</div>
         <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Toute la vivacité de la séance, réinvestissez-la dans vos changements de direction. »</em></li>
           <li>10 min de « épervier » avec ballon : traverser le terrain en conduite sans se faire prendre</li>
           <li>15 min de match libre pour réinvestir la vivacité</li>
           <li>Jeu collectif qui muscle les changements de direction sans qu'ils s'en rendent compte</li>
@@ -1086,6 +1178,18 @@
       <div class="sarrow">▶</div>
     </div>
     <div class="seance-body">
+      <div class="fil-seance"><span class="fico">🧵</span><span><strong>Fil conducteur : Être dangereux sur phases arrêtées</strong>2 routines simples répétées jusqu'à l'automatisme, puis un match qui les provoque volontairement.</span></div>
+      <div class="exo-block phys">
+        <div class="exo-label phys">⏱ 15 min · Échauffement</div>
+        <div class="exo-title">Rondo + mobilité avant les coups de pied</div>
+        <div class="exo-duration">Matériel : 4 plots · 1 ballon par groupe</div>
+        <ul class="exo-steps">
+          <li>Rondo 5v2 classique 8 min pour chauffer les appuis et les passes</li>
+          <li>Mobilité ciblée : hanches, ischio-jambiers, chevilles</li>
+          <li>Quelques frappes progressives à courte distance avant les vrais coups francs</li>
+        </ul>
+      </div>
+
       <div class="exo-block tech">
         <div class="exo-label tech">⏱ 20 min · Technique</div>
         <div class="exo-title">Atelier frappe placée</div>
@@ -1109,7 +1213,7 @@
           <li>Répéter chaque schéma plusieurs fois jusqu'à l'automatisme</li>
           <li>Garde-le simple : 2 routines bien maîtrisées valent mieux que 6 confuses</li>
         </ul>
-        <button class="schema-link" onclick="goToSchema('schema-corner')">📐 Voir le schéma</button>
+        <button class="schema-link" onclick="goToSchema('schema-corner', this)">📐 Voir le schéma</button>
         <div class="tip"><strong>💡 Astuce éduc</strong>Les coups de pied arrêtés rapportent beaucoup de buts en U15 car les défenses sont encore désorganisées dessus. C'est un investissement rentable, même avec un groupe débutant.</div>
       </div>
 
@@ -1117,6 +1221,7 @@
         <div class="exo-label jeu">⏱ 15 min · Match</div>
         <div class="exo-title">Match — corners provoqués</div>
         <ul class="exo-steps">
+          <li><em>Briefing 1 phrase : « Nos 2 routines, à chaque corner. Rien d'autre à penser. »</em></li>
           <li>Match 8v8 ; chaque sortie de but adverse est jouée en corner pour répéter les routines</li>
           <li>But sur phase arrêtée = compte double</li>
         </ul>
@@ -1128,6 +1233,7 @@
 
 <!-- ══════════════════════════════════════════════════════ PAGE 3 : EXERCICES & SCHÉMAS -->
 <div class="page" id="page-exercices">
+
 
   <div class="section-title">Schémas d'exercices — Vue terrain</div>
   <p style="font-size:13px; color:var(--gris); margin-bottom:12px;">Vue du dessus + description étape par étape. Les schémas suivent les conventions du dessin tactique : chaque type de trait a un sens précis. Les actions sont numérotées dans l'ordre ① ② ③.</p>
@@ -1949,7 +2055,7 @@
   <div class="section-title">Progression par phase</div>
 
   <div class="card">
-    <div class="prog-phase"><div class="prog-dot"></div><div class="prog-line"><strong>Phase 1 (Juil–Août)</strong> : Cohésion, plaisir, évaluation des niveaux. Pas de pression. Beaucoup de jeux.</div></div>
+    <div class="prog-phase"><div class="prog-dot"></div><div class="prog-line"><strong>Phase 1 (fin août · 3 semaines)</strong> : Reprise express — cohésion, observation des niveaux, bases techniques, premiers repères du grand terrain. La condition vient du jeu, pas de footings.</div></div>
     <div class="prog-phase"><div class="prog-dot"></div><div class="prog-line"><strong>Phase 2 (Sep–Déc)</strong> : Technique individuelle. Premiers automatismes. Introduction progressivement du foot à 11.</div></div>
     <div class="prog-phase"><div class="prog-dot"></div><div class="prog-line"><strong>Phase 3 (Janvier)</strong> : Consolidation. Travailler sur les points faibles collectifs identifiés.</div></div>
     <div class="prog-phase"><div class="prog-dot"></div><div class="prog-line"><strong>Phase 4 (Fév–Avr)</strong> : Jeu collectif plus organisé, transitions, pressing. Séances plus intenses.</div></div>
@@ -1988,7 +2094,7 @@
       <li>Règle des 3 positifs : avant chaque critique, dis 3 choses bien</li>
       <li>Pose des questions plutôt qu'imposer : "Pourquoi tu penses qu'on a perdu ce ballon ?"</li>
       <li>À cet âge, l'humour est une arme — ris avec eux, jamais d'eux</li>
-      <li>Fin de séance en cercle : 1 min où chacun peut dire ce qu'il a aimé ou appris</li>
+      <li>Fin de séance en cercle avec une question PRÉCISE liée au thème du jour — pas « qu'est-ce que vous avez aimé ? » mais « cite un espace que tu as trouvé », « cite une passe dont tu es fier ». La précision ancre l'apprentissage.</li>
     </ul>
   </div>
 
@@ -2072,6 +2178,164 @@
         </ul>
       </div>
     </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════ PAGE : GARDIEN -->
+<div class="page" id="page-gardien">
+
+  <div class="section-title">Le principe — progresser sans coach de gardiens</div>
+
+  <div class="card">
+    <div class="card-title">🧤 4 règles simples pour intégrer ton gardien</div>
+    <ul class="exo-steps">
+      <li><strong>Échauffement : TOUJOURS avec le groupe.</strong> Il court, il jongle, il fait les navettes comme les autres — un gardien est d'abord un footballeur.</li>
+      <li><strong>Pendant 1-2 blocs sans buts (technique, conservation) : travail spécifique.</strong> 10-15 min avec un « serveur » — un joueur qui tourne à chaque séance et lui envoie des ballons.</li>
+      <li><strong>Dès qu'il y a des buts (finition, jeux réduits avec cages, match) : il rejoint le groupe.</strong> Chaque frappe adverse est SON entraînement — ne le prive jamais de ces blocs.</li>
+      <li><strong>Rondos et conservation : il participe comme joueur de champ.</strong> Le jeu au pied du gardien moderne se construit là, gratuitement.</li>
+    </ul>
+    <div class="tip"><strong>💡 Le serveur tournant</strong>Désigne un joueur différent à chaque séance pour servir les ballons au gardien. Ça valorise les remplaçants, ça ne pénalise personne (10 min max), et ton gardien a un vrai partenaire de travail sans que tu quittes le groupe.</div>
+  </div>
+
+  <div class="section-title">Quand faire du spécifique ? Séance par séance</div>
+
+  <div class="card" style="padding:12px;">
+    <table class="gk-table">
+      <thead><tr><th>Séance</th><th class="gk-avec">✅ Avec le groupe</th><th class="gk-spe">🧤 Son moment spécifique</th></tr></thead>
+      <tbody>
+        <tr><td>ST1 · MAR<br>Reprise</td><td class="gk-avec">Échauffement · 3v3 (comme joueur) · match dans le but</td><td class="gk-spe">Pendant le Passe &amp; va : gammes de prises de balle (G1)</td></tr>
+        <tr><td>ST1 · VEN<br>Conduite &amp; dribble</td><td class="gk-avec">Échauffement slalom (excellent pour ses appuis) · match dans le but</td><td class="gk-spe">Pendant le 1v1 et les portes : appuis &amp; déplacements (G2)</td></tr>
+        <tr><td>ST2 · MAR<br>Jeu à 11</td><td class="gk-avec">Rondo (comme joueur) · match 9v9 dans le but</td><td class="gk-spe">Pendant le jeu des couloirs : jeu au pied &amp; relances (G4)</td></tr>
+        <tr class="gk-or"><td>ST2 · VEN<br>Finition</td><td class="gk-avec">TOUTE LA SÉANCE — c'est sa séance en or : arrêts en continu sur les 4 ateliers, le 2v1 et le match</td><td class="gk-spe">Aucun — il est indispensable au groupe</td></tr>
+        <tr><td>ST3 · MAR<br>Conservation</td><td class="gk-avec">Rondo et 6v3 comme joueur de champ (jeu au pied) · match</td><td class="gk-spe">Pendant le triangle mobile : plongeons par paliers (G3)</td></tr>
+        <tr><td>ST3 · VEN<br>Défense collective</td><td class="gk-avec">Échauffement · il COMMANDE la ligne à la voix pendant le rideau · match</td><td class="gk-spe">Pendant la mise en place du rideau (sans attaquants) : prises de balle (G1)</td></tr>
+        <tr><td>ST4 · MAR<br>Transitions</td><td class="gk-avec">Échauffement réaction (parfait pour lui) · 3v2 avec gardien · match — quasi toute la séance</td><td class="gk-spe">Option 10 min avant le 3v2 : sorties aériennes (G5)</td></tr>
+        <tr><td>ST4 · VEN<br>Tête &amp; duels</td><td class="gk-avec">Duel corps à corps · match dans le but</td><td class="gk-spe">Pendant les paliers de tête : sorties aériennes (G5) — même thème, version gardien</td></tr>
+        <tr class="gk-or"><td>ST5 · MAR<br>Vitesse &amp; coordination</td><td class="gk-avec">TOUTE LA SÉANCE — l'échelle d'agilité et les circuits sont de l'or pur pour un gardien</td><td class="gk-spe">Option : il finit chaque circuit par un arrêt au lieu d'une frappe</td></tr>
+        <tr class="gk-or"><td>ST5 · VEN<br>Phases arrêtées</td><td class="gk-avec">TOUTE LA SÉANCE — les corners sont son meilleur entraînement de sorties aériennes en situation réelle</td><td class="gk-spe">Aucun — il est au cœur de la séance</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px; color:var(--gris); margin-top:8px;">Bilan : sur une semaine type, ton gardien fait 1 à 2 blocs spécifiques de 10-15 min, et le reste avec le groupe. C'est exactement le bon dosage en amateur — assez pour progresser au poste, pas assez pour l'isoler du collectif.</p>
+  </div>
+
+  <div class="section-title">Banque d'exercices spécifiques — 10-15 min avec 1 serveur</div>
+
+  <div class="card" id="gk-g1">
+    <div class="card-title">G1 — Gammes de prises de balle</div>
+    <div class="exo-block tech">
+      <div class="exo-label tech">⏱ 10 min · Base fondamentale</div>
+      <ul class="exo-steps">
+        <li>Serveur à 5-8 m · 3 types de ballons : roulé au sol (prise en cuillère), mi-hauteur (mains en W, pouces qui se touchent), au-dessus de la tête</li>
+        <li>10 ballons par type, vitesse en augmentation progressive</li>
+        <li>Consigne d'or : <strong>toujours le corps derrière le ballon</strong> — les mains ne sont que la dernière barrière</li>
+        <li>Variante : le serveur annonce « sol ! » ou « haut ! » au dernier moment</li>
+      </ul>
+      <div class="tip"><strong>💡 Astuce éduc</strong>C'est l'exercice à répéter le plus souvent. 80% des buts encaissés en amateur viennent d'une prise de balle ratée, pas d'un manque de détente.</div>
+    </div>
+    <div class="mat-chips"><span class="chip">6 ballons</span><span class="chip">1 serveur</span><span class="chip">Devant le but ou contre un mur</span></div>
+  </div>
+
+  <div class="card" id="gk-g2">
+    <div class="card-title">G2 — Appuis & déplacements</div>
+    <div class="exo-block phys">
+      <div class="exo-label phys">⏱ 10 min · Jeu de jambes</div>
+      <ul class="exo-steps">
+        <li>3 plots en arc de cercle devant le but (poteau gauche, centre, poteau droit)</li>
+        <li>Pas chassés de plot en plot — <strong>jamais croiser les jambes</strong>, toujours face au jeu</li>
+        <li>Au signal du serveur : frappe faible que le gardien doit arrêter après son déplacement</li>
+        <li>Variante : le serveur annonce un plot, le gardien le touche puis se replace au centre avant la frappe</li>
+      </ul>
+    </div>
+    <div class="terrain-wrap">
+      <svg viewBox="0 0 360 200" width="360" height="200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="gk-move" markerWidth="9" markerHeight="7" refX="7" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#f0861a"/></marker>
+          <marker id="gk-shot" markerWidth="11" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0 0,11 4.5,0 9" fill="#f0c030"/></marker>
+        </defs>
+        <rect width="360" height="200" fill="#0a3d1f" rx="8"/>
+        <!-- but -->
+        <rect x="105" y="12" width="150" height="8" fill="#fff"/>
+        <line x1="105" y1="20" x2="105" y2="60" stroke="#fff" stroke-width="3"/>
+        <line x1="255" y1="20" x2="255" y2="60" stroke="#fff" stroke-width="3"/>
+        <!-- plots en arc -->
+        <polygon points="120,80 127,94 113,94" fill="#f0c030"/>
+        <polygon points="180,95 187,109 173,109" fill="#f0c030"/>
+        <polygon points="240,80 247,94 233,94" fill="#f0c030"/>
+        <!-- gardien au centre -->
+        <circle cx="180" cy="65" r="13" fill="#f0861a" stroke="#fff" stroke-width="1.5"/>
+        <text x="180" y="69" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">G</text>
+        <!-- déplacements pas chassés -->
+        <path d="M165 72 Q 140 78 126 92" stroke="#f0861a" stroke-width="2.5" fill="none" stroke-dasharray="5,4" marker-end="url(#gk-move)"/>
+        <path d="M195 72 Q 220 78 234 92" stroke="#f0861a" stroke-width="2.5" fill="none" stroke-dasharray="5,4" marker-end="url(#gk-move)"/>
+        <!-- serveur + frappe -->
+        <circle cx="180" cy="165" r="13" fill="#2b9ddb" stroke="#fff" stroke-width="1.5"/>
+        <text x="180" y="169" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">S</text>
+        <circle cx="194" cy="158" r="5.5" fill="#fff" stroke="#111"/><circle cx="194" cy="158" r="1.8" fill="#111"/>
+        <line x1="192" y1="152" x2="150" y2="90" stroke="#f0c030" stroke-width="3" marker-end="url(#gk-shot)"/>
+        <text x="285" y="130" fill="#ffffff66" font-size="10">pas chassés,</text>
+        <text x="285" y="143" fill="#ffffff66" font-size="10">jamais croisés</text>
+      </svg>
+      <div class="terrain-caption">Le gardien (G) se déplace en pas chassés entre les plots, le serveur (S) frappe faible au signal. Déplacement → replacement → arrêt.</div>
+    </div>
+    <div class="mat-chips"><span class="chip">3 plots</span><span class="chip">4 ballons</span><span class="chip">1 serveur</span></div>
+  </div>
+
+  <div class="card" id="gk-g3">
+    <div class="card-title">G3 — Plongeons par paliers (sécurité d'abord)</div>
+    <div class="exo-block tact">
+      <div class="exo-label tact">⏱ 15 min · Progression par confiance</div>
+      <ul class="exo-steps">
+        <li><strong>Palier 1 — assis :</strong> ballon roulé sur le côté, saisie au sol en basculant</li>
+        <li><strong>Palier 2 — à genoux :</strong> même chose, le corps apprend à tomber côté ballon</li>
+        <li><strong>Palier 3 — accroupi :</strong> ballon roulé plus loin, extension vers le sol</li>
+        <li><strong>Palier 4 — debout :</strong> ballon lancé à mi-hauteur, plongeon complet</li>
+        <li>Amortir avec la séquence <strong>ballon → avant-bras → épaule → hanche</strong> — jamais le coude planté, jamais le poignet seul</li>
+      </ul>
+      <div class="tip"><strong>⚠️ Sécurité</strong>Jamais de plongeons à froid, jamais sur sol dur ou caillouteux. Si le terrain est sec en été, garde les paliers 1-2 seulement ou reporte. Un gardien qui a peur de tomber ne plongera jamais en match — la confiance se construit palier par palier, pas en le jetant au sol.</div>
+    </div>
+    <div class="mat-chips"><span class="chip">4 ballons</span><span class="chip">1 serveur</span><span class="chip">Herbe correcte obligatoire</span></div>
+  </div>
+
+  <div class="card" id="gk-g4">
+    <div class="card-title">G4 — Jeu au pied & relances</div>
+    <div class="exo-block jeu">
+      <div class="exo-label jeu">⏱ 10 min · Le gardien moderne</div>
+      <ul class="exo-steps">
+        <li>Contrôle-passe avec le serveur qui presse doucement, comme un attaquant qui vient</li>
+        <li>Relance mi-longue sur cible : un carré de 4 plots à ~25 m, 1 point si le ballon retombe dedans</li>
+        <li>Alterner pied fort / pied faible dès que le pied fort est fiable</li>
+        <li>Règle moderne à lui apprendre : <strong>le gardien est le +1 de la construction</strong> — il ne dégage pas, il choisit</li>
+      </ul>
+    </div>
+    <div class="mat-chips"><span class="chip">4 plots (cible)</span><span class="chip">4 ballons</span><span class="chip">1 serveur</span></div>
+  </div>
+
+  <div class="card" id="gk-g5">
+    <div class="card-title">G5 — Sorties aériennes</div>
+    <div class="exo-block tech">
+      <div class="exo-label tech">⏱ 10 min · Le geste qui rassure toute la défense</div>
+      <ul class="exo-steps">
+        <li>Serveur qui lance en cloche dans la zone des 6 mètres</li>
+        <li>Appel fort obligatoire : <strong>« J'AI ! »</strong> avant chaque sortie — la voix fait partie du geste</li>
+        <li>Prise au point le plus haut, bras tendus, <strong>genou levé de protection</strong></li>
+        <li>Variante : un 2ème joueur gêne passivement (présence sans saut) pour habituer au contact</li>
+      </ul>
+      <div class="tip"><strong>💡 Astuce éduc</strong>Enchaîne cet exercice avec la séance Phases arrêtées (ST5 · VEN) : ce qu'il travaille ici en isolé, il le réinvestit sur les corners en situation réelle. C'est ton fil conducteur version gardien.</div>
+    </div>
+    <div class="mat-chips"><span class="chip">3 ballons</span><span class="chip">1-2 serveurs</span><span class="chip">Zone des 6 m</span></div>
+  </div>
+
+  <div class="section-title">Conseils gardien en club amateur</div>
+
+  <div class="card">
+    <ul class="exo-steps">
+      <li><strong>Pas de gardien fixe ?</strong> Fais tourner 2-3 volontaires sur les matchs d'entraînement, mais garde le travail spécifique pour celui qui garde en match officiel. Ne force jamais un joueur à aller au but en punition — c'est le meilleur moyen de dégoûter du poste.</li>
+      <li><strong>Valorise le poste :</strong> à chaque bel arrêt en match ou à l'entraînement, dis-le à voix haute devant le groupe. Le gardien est le poste le plus courageux et le plus solitaire — il a besoin de reconnaissance publique.</li>
+      <li><strong>La voix avant la détente :</strong> un gardien U15 qui parle (« J'ai ! », « Sors ! », « Gauche ! ») progresse plus vite que celui qui plonge bien en silence. Exige la communication sur chaque exercice.</li>
+      <li><strong>Les gants :</strong> utiles mais pas indispensables à l'entraînement par temps sec. En revanche, vérifie qu'il ne garde pas avec des gants troués en match — les doigts se blessent sur les ballons puissants.</li>
+      <li><strong>Après une erreur en match :</strong> jamais de reproche à chaud. Le gardien est le seul joueur dont chaque erreur finit au fond des filets. Debrief à froid, à la séance suivante, en commençant par ce qu'il a bien fait.</li>
+    </ul>
   </div>
 
 </div>
@@ -2229,6 +2493,8 @@
 
 <script>
   function showTab(name) {
+    var back = document.getElementById('btn-back-seance');
+    if (back) back.style.display = 'none';
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
@@ -2240,7 +2506,15 @@
     wrap.classList.toggle('open');
   }
 
-  function goToSchema(schemaId) {
+  var lastSeanceOrigin = null;
+
+  function goToSchema(schemaId, btn) {
+    // mémorise la séance d'origine pour le bouton retour
+    lastSeanceOrigin = null;
+    if (btn) {
+      var wrap = btn.closest('.seance-wrap');
+      if (wrap) lastSeanceOrigin = wrap.id;
+    }
     // bascule vers l'onglet Exercices & schémas
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => {
@@ -2248,6 +2522,9 @@
       if (b.textContent.indexOf('Exercices') !== -1) b.classList.add('active');
     });
     document.getElementById('page-exercices').classList.add('active');
+    // affiche le bouton retour uniquement si on vient d'une séance
+    var back = document.getElementById('btn-back-seance');
+    if (back) back.style.display = lastSeanceOrigin ? 'flex' : 'none';
     // défile jusqu'au schéma et le met en surbrillance
     const el = document.getElementById(schemaId);
     if (el) {
@@ -2255,6 +2532,52 @@
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
         el.classList.add('schema-highlight');
         setTimeout(function () { el.classList.remove('schema-highlight'); }, 1800);
+      }, 60);
+    }
+  }
+
+  function goToGardien(gkId, btn) {
+    lastSeanceOrigin = null;
+    if (btn) {
+      var wrap = btn.closest('.seance-wrap');
+      if (wrap) lastSeanceOrigin = wrap.id;
+    }
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      if (b.textContent.indexOf('Gardien') !== -1) b.classList.add('active');
+    });
+    document.getElementById('page-gardien').classList.add('active');
+    var back = document.getElementById('btn-back-seance');
+    if (back) back.style.display = lastSeanceOrigin ? 'flex' : 'none';
+    const el = document.getElementById(gkId);
+    if (el) {
+      setTimeout(function () {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.classList.add('schema-highlight');
+        setTimeout(function () { el.classList.remove('schema-highlight'); }, 1800);
+      }, 60);
+    }
+  }
+
+  function backToSeance() {
+    if (!lastSeanceOrigin) return;
+    // rebascule vers l'onglet Séances type
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      if (b.textContent.indexOf('Séances') !== -1) b.classList.add('active');
+    });
+    document.getElementById('page-seances').classList.add('active');
+    document.getElementById('btn-back-seance').style.display = 'none';
+    // rouvre la séance d'origine et défile jusqu'à elle
+    var el = document.getElementById(lastSeanceOrigin);
+    if (el) {
+      el.classList.add('open');
+      setTimeout(function () {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.classList.add('schema-highlight');
+        setTimeout(function () { el.classList.remove('schema-highlight'); }, 1500);
       }, 60);
     }
   }
